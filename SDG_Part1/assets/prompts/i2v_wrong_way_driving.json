@@ -1,0 +1,54 @@
+{
+  "subjects": [
+    {
+      "description": "A single vehicle driving in the wrong direction — against the flow of traffic — entering the intersection through an exit lane",
+      "appearance_details": "Standard passenger vehicle viewed from overhead, rooftop visible, traveling in the opposite direction to lane arrow markings beneath it",
+      "relationship": "Primary subject — the wrong-way vehicle creating a hazardous conflict",
+      "location": "Enters from an approach lane, traveling in the reverse of the indicated direction",
+      "relative_size": "Single vehicle, similar scale to other vehicles visible from overhead",
+      "orientation": "Facing opposite to the lane's indicated direction of travel",
+      "pose": "Upright, wheels contacting the road, moving forward at moderate speed",
+      "action": "Enters the intersection traveling against the correct traffic direction at moderate speed, moving into oncoming lanes. Traverses the intersection box without stopping or yielding. Continues out of frame on the wrong side of the road while other traffic reacts around it.",
+      "state_changes": "Enters frame in the wrong direction, travels through the intersection at steady speed, and exits — no deceleration or correction",
+      "number_of_subjects": "One vehicle"
+    },
+    {
+      "description": "Oncoming vehicles traveling in the correct direction who encounter the wrong-way vehicle",
+      "appearance_details": "Multiple vehicles in correct travel lanes, viewed from above",
+      "relationship": "Reacting traffic — vehicles responding to the hazard in their path",
+      "location": "Correct travel lanes approaching and within the intersection",
+      "relative_size": "Multiple vehicles visible from overhead",
+      "orientation": "Facing along the correct direction of travel, toward the oncoming wrong-way vehicle",
+      "pose": "Upright, wheels contacting the road; transitions to braking posture with small lateral steering adjustments",
+      "action": "Approach the intersection normally. React to the wrong-way vehicle with sudden braking and small evasive steering adjustments. Some come to a complete stop; others maneuver laterally to create clearance. No contact occurs. After the wrong-way vehicle clears, traffic cautiously resumes.",
+      "state_changes": "Transitions from normal travel to emergency braking and evasive maneuvers, then cautious resumption",
+      "number_of_subjects": "Multiple vehicles, 2-4"
+    }
+  ],
+  "background_setting": "A four-way signalized intersection viewed from a fixed elevated surveillance camera. All lane markings, directional arrows, stop lines, and traffic signal heads remain clearly visible throughout. The wrong-way vehicle's path is clearly contra-directional to the painted arrow markings. Camera angle, crop, and scene geometry are preserved exactly. Use the provided image as the exact first frame.",
+  "lighting": {
+    "conditions": "Consistent with the seed image throughout — no lighting change during the event",
+    "direction": "Overhead natural light as established in the seed image",
+    "shadows": "Short, stable vehicle shadows consistent with overhead lighting",
+    "illumination_effect": "Clear, even illumination providing full visibility of vehicle positions, lane markings, and directional cues",
+    "sky": "Clear or lightly overcast daytime sky, consistent with the seed image"
+  },
+  "aesthetics": {
+    "composition": "Fixed overhead intersection framing, matching the seed image",
+    "color_scheme": "Natural daylight tones — gray asphalt, painted lane markings, varied vehicle colors",
+    "mood_atmosphere": "Tense, sudden hazard within an otherwise routine daytime scene",
+    "patterns": "A single vehicle moving contrary to the directional flow, framed against the surrounding orderly traffic"
+  },
+  "cinematography": {
+    "camera_motion": "Fixed — the camera does not pan, tilt, or zoom",
+    "framing": "Wide overhead establishing shot of the full intersection",
+    "camera_angle": "Elevated, near-top-down surveillance angle",
+    "depth_of_field": "Deep — all lanes and vehicles remain in focus",
+    "focus": "Uniformly sharp across the intersection",
+    "camera_preservation": "Use the provided image as the exact first frame and preserve its perspective and framing throughout"
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic daytime traffic-surveillance footage",
+  "context": "A vehicle drives against the flow of traffic through the intersection, forcing oncoming vehicles to brake and steer evasively with no collision",
+  "negative_prompt": "actual collision or contact between vehicles, wrong-way vehicle correcting or turning around, multiple wrong-way vehicles, teleporting vehicles, flickering, camera motion, pan, tilt, zoom, added pedestrians, added signage, nighttime, changed lane markings"
+}

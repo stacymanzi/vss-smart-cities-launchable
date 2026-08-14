@@ -1,0 +1,66 @@
+{
+  "subjects": [
+    {
+      "description": "All vehicles present in the source video, traveling through the intersection",
+      "appearance_details": "Re-rendered with snow accumulation on rooftops and hoods. Headlights and tail lights are active and cast visible beams through falling snow. Preserve every vehicle's original body shape, color, size, and visual identity from the source video.",
+      "relationship": "Same relative positions, lane occupancy, and interactions between vehicles as the source video",
+      "location": "Identical to source video",
+      "relative_size": "Identical to source video",
+      "orientation": "Identical to source video",
+      "pose": "All vehicles remain upright with wheels naturally contacting the road surface",
+      "action": "Identical actions and trajectories as the source video — only surface appearance and lighting change, not behavior or motion",
+      "state_changes": "Identical to the source video — traffic timing and event progression unchanged",
+      "number_of_subjects": "Multiple vehicles, matching the source video count"
+    }
+  ],
+  "background_setting": "The same structural layout and scene geometry as the source video, re-rendered under nighttime winter conditions. Road surface is covered with compacted snow and slush, with tire tracks visible in the travel lanes. Snow is actively falling — light to moderate snowfall visible as white specks against the dark sky. Sidewalks, lane markings, and surrounding structures carry a layer of fresh snow. Traffic signal heads and streetlights are the primary light sources, their glow diffused and softened by falling snow. All scene geometry, camera angle, and composition are preserved exactly.",
+  "environmental_transformation": {
+    "target_condition": "Nighttime winter with active snowfall",
+    "transformation_scope": "Replace daytime or ambient lighting with nighttime artificial illumination and apply accumulated and falling snow to the roadway, sidewalks, and surrounding terrain. Change only the sky, exposure, ambient illumination, surface appearance, and snow coverage.",
+    "preservation_requirements": "Preserve the exact source-video camera position, crop, perspective, field of view, intersection geometry, vehicle identities, vehicle count, trajectories, speeds, relative spacing, and event timing.",
+    "prohibited_changes": [
+      "Do not move any vehicle into a different lane or alter its original trajectory",
+      "Do not add, remove, duplicate, replace, recolor, or resize any vehicle",
+      "Do not alter vehicle speeds, spacing, or traffic timing",
+      "Do not bury the active lanes, crosswalks, or lane markings beneath deep snow",
+      "Do not alter the intersection geometry, curbs, signal poles, or surrounding structures",
+      "Do not add snowplows, emergency vehicles, or new roadside structures",
+      "Do not retain daytime lighting or an unclouded bright sky"
+    ]
+  },
+  "lighting": {
+    "conditions": "Nighttime winter conditions — dark sky with active snowfall; artificial lighting is the sole illumination source",
+    "direction": "Multiple point sources from streetlights above and traffic signal heads; diffuse ambient fill from snow-covered ground surfaces reflecting artificial light upward",
+    "shadows": "Soft, diffuse shadows due to multiple light sources and light scatter from falling snow; reduced shadow contrast compared to daylight",
+    "illumination_effect": "Warm amber and cool white pools of artificial light against a dark background; falling snow catches the light and creates a visible haze; snow-covered ground reflects upward light giving the scene a cool, bright-ground appearance",
+    "sky": "Dark night sky, no visible stars or moon due to falling snow and cloud cover",
+    "surface_conditions": "Compacted snow and slush on travel lanes with visible tire tracks; fresh, undisturbed snow on sidewalks, medians, and shoulders",
+    "artificial_lighting": "Traffic signal heads and streetlights are active and are the primary light sources, their glow diffused and softened by falling snow"
+  },
+  "aesthetics": {
+    "composition": "Same fixed overhead intersection framing as the source video",
+    "color_scheme": "Cool blue-gray night tones with warm amber pools from artificial lights, muted white snow, dark wet asphalt",
+    "mood_atmosphere": "Quiet, cold, atmospheric nighttime winter traffic scene",
+    "patterns": "Falling snowflakes, tire tracks through snow, diffused halos around light sources"
+  },
+  "cinematography": {
+    "camera_motion": "Identical to source video — locked off",
+    "framing": "Identical to source video — wide overhead intersection view",
+    "camera_angle": "Identical to source video — elevated fixed camera angle",
+    "depth_of_field": "Identical to source video",
+    "focus": "Identical to source video",
+    "camera_preservation": "Preserve the exact source camera. Do not pan, tilt, zoom, crop, reframe, rotate, or alter perspective."
+  },
+  "control_guidance": {
+    "control_type": "Edge",
+    "structure_priority": "Use the input-video edges as strict structural guidance. Preserve every vehicle silhouette, lane boundary, curb, crosswalk, and signal pole throughout the clip.",
+    "appearance_freedom": "Allow changes only to sky appearance, illumination, snow accumulation, road surface texture, shadow character, and color temperature",
+    "motion_priority": "All vehicles must follow their exact source-video trajectories. Edge guidance must not cause vehicles to change lanes, stop unexpectedly, or disappear.",
+    "temporal_consistency": "Maintain stable snowfall density, light placement, and vehicle appearance across every frame. Snow must not flicker or move independently of the falling motion."
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic nighttime traffic-surveillance footage under active snowfall",
+  "context": "Nighttime snowy augmentation of an existing intersection traffic video using Cosmos 3 Transfer with Edge control",
+  "negative_prompt": "daytime, bright sunlight, clear sky, no snow, dry pavement, corrected vehicle trajectory, changed lane position, changed traffic direction, changed speed, collision, added vehicle, removed vehicle, duplicated vehicle, recolored vehicle, added pedestrian, added building, camera motion, camera shake, pan, tilt, zoom, geometry drift, flicker",
+  "audio_description": "Preserve the original video audio without alteration. Do not add wind, snowfall sounds, sirens, horns, or new traffic audio."
+}
