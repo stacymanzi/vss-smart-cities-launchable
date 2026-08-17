@@ -1,0 +1,42 @@
+{
+  "subjects": [
+    {
+      "description": "What the primary subject(s) are, as seen in the provided image",
+      "appearance_details": "Preserve exact appearance, shape, color, size, and identity from the provided image — do not invent details",
+      "relationship": "Role and interaction with other subjects in the scene",
+      "location": "Position as seen in the provided image",
+      "relative_size": "Size relative to the frame, as seen in the provided image",
+      "orientation": "Facing direction / orientation as seen in the provided image",
+      "pose": "Physical pose or configuration as seen in the provided image",
+      "action": "DETAILED motion description — specific direction, speed, trajectory, and interactions during the clip. This is the primary driver of what the model generates.",
+      "state_changes": "How the subject's state changes during the clip",
+      "number_of_subjects": "Count of distinct subjects of this type"
+    }
+  ],
+  "background_setting": "Environment description grounded in the provided image. Must include: 'Use the provided image as the exact first frame. Preserve all scene geometry, camera angle, and background elements unchanged throughout.'",
+  "lighting": {
+    "conditions": "As established in the provided image",
+    "direction": "Light source direction",
+    "shadows": "Shadow character and direction",
+    "illumination_effect": "Overall illumination effect",
+    "sky": "Sky appearance, if visible, consistent with the provided image"
+  },
+  "aesthetics": {
+    "composition": "Overall shot composition, matching the provided image",
+    "color_scheme": "Color palette and tones, matching the provided image",
+    "mood_atmosphere": "Overall mood conveyed by the scene",
+    "patterns": "Recurring visual patterns or textures present in the scene"
+  },
+  "cinematography": {
+    "camera_motion": "State the camera behavior — by default the camera is fixed/locked; only describe motion if a motion-control checkpoint is being used",
+    "framing": "Shot framing, matching the provided image",
+    "camera_angle": "Camera angle, matching the provided image",
+    "depth_of_field": "Depth of field, matching the provided image",
+    "focus": "Focus characteristics, matching the provided image",
+    "camera_preservation": "State plainly: anchor to the provided image as the first frame and preserve its perspective and framing"
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic style matching the provided image",
+  "context": "One-sentence summary of what event or motion this clip depicts",
+  "negative_prompt": "Comma-separated list of concepts to avoid — anything that would contradict the described action or alter scene structure/identity unexpectedly"
+}

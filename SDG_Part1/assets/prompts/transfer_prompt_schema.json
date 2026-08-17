@@ -1,0 +1,60 @@
+{
+  "subjects": [
+    {
+      "description": "What the primary subject(s) are, as seen in the source video",
+      "appearance_details": "Preserve exact appearance, shape, color, size, and identity from the source video — do not invent details",
+      "relationship": "Role and interaction with other subjects, identical to the source video",
+      "location": "Position within the frame, identical to the source video",
+      "relative_size": "Size relative to the frame, identical to the source video",
+      "orientation": "Facing direction / orientation, identical to the source video",
+      "pose": "Physical pose or configuration, identical to the source video",
+      "action": "State plainly that motion and trajectory are identical to the source video — do not invent new motion or behavior",
+      "state_changes": "State plainly that state changes and event timing are identical to the source video",
+      "number_of_subjects": "Count of distinct subjects of this type"
+    }
+  ],
+  "background_setting": "Full environment description. Must state: 'The same structural layout and scene geometry as the source video' and 'All scene geometry, camera angle, and composition are preserved exactly.' Then describe the target appearance transformation applied to that environment.",
+  "environmental_transformation": {
+    "target_condition": "The target weather / time-of-day / environmental condition being applied",
+    "transformation_scope": "What specifically changes — sky, exposure, ambient illumination, surface appearance, and other physically expected effects. Change only appearance, never structure or motion.",
+    "preservation_requirements": "Restate: exact camera position, crop, perspective, field of view, scene geometry, subject identities, subject count, trajectories, speeds, relative spacing, and event timing must all be preserved from the source video.",
+    "prohibited_changes": [
+      "List specific things that must NOT happen — e.g. do not alter subject trajectories or speeds, do not add/remove/duplicate/recolor subjects, do not change camera framing, do not introduce new objects or structures, do not revert to source-video conditions"
+    ]
+  },
+  "lighting": {
+    "conditions": "Overall lighting condition after the transformation",
+    "direction": "Light source direction",
+    "shadows": "Shadow character and direction",
+    "illumination_effect": "How the new lighting affects the scene's visibility and exposure",
+    "sky": "Sky appearance, if visible",
+    "surface_conditions": "How the target condition's effects (e.g. wetness, snow, dust) appear on the ground/surfaces, conforming to existing geometry",
+    "artificial_lighting": "State of any artificial light sources (e.g. streetlights, headlights, signage) under the new condition"
+  },
+  "aesthetics": {
+    "composition": "Overall shot composition, matching the source video",
+    "color_scheme": "Target color palette and tones",
+    "mood_atmosphere": "Overall mood conveyed by the new appearance",
+    "patterns": "Recurring visual patterns or textures introduced or preserved"
+  },
+  "cinematography": {
+    "camera_motion": "State plainly that camera motion is identical to the source video",
+    "framing": "Shot framing, matching the source video",
+    "camera_angle": "Camera angle, matching the source video",
+    "depth_of_field": "Depth of field, matching the source video",
+    "focus": "Focus characteristics, matching the source video",
+    "camera_preservation": "State plainly: preserve the exact source camera — do not pan, tilt, zoom, crop, reframe, rotate, or alter perspective"
+  },
+  "control_guidance": {
+    "control_type": "The transfer control modality being used (e.g. Edge, Depth, Segmentation, Blur, WSM)",
+    "structure_priority": "Instruct the model to use the control signal as strict structural guidance, preserving all subject silhouettes, boundaries, and scene structure throughout",
+    "appearance_freedom": "List which attributes are allowed to change (e.g. lighting, weather, surface texture, color temperature) — appearance only, never structure or motion",
+    "motion_priority": "Instruct that all subjects must follow their exact source-video trajectories; control guidance must never cause subjects to move differently than the source",
+    "temporal_consistency": "Instruct that the new appearance must remain stable and consistent frame-to-frame — no flickering, shimmering, or drifting"
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic style matching the target condition",
+  "context": "One-sentence summary of what this transfer accomplishes and which control modality is used",
+  "negative_prompt": "Comma-separated list of concepts to avoid — conditions that contradict the target condition, and anything that would alter structure, subject identity, or motion",
+  "audio_description": "State plainly: preserve the original video audio without alteration, unless describing new ambient sound consistent with the target condition"
+}

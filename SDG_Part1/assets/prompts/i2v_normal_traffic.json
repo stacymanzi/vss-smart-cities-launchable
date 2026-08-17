@@ -1,0 +1,54 @@
+{
+  "subjects": [
+    {
+      "description": "Multiple vehicles queued in lanes approaching the intersection from one direction, stopped at a red traffic light",
+      "appearance_details": "Standard passenger vehicles and SUVs in various colors, visible from above — rooftops and hoods facing the camera, positioned behind the stop line",
+      "relationship": "Primary moving group — queued traffic on a controlled approach, strictly governed by signal phase",
+      "location": "Approach lanes visible in the provided image, behind the stop line",
+      "relative_size": "Multiple vehicles occupying one to two approach lanes, viewed from overhead",
+      "orientation": "Facing toward the intersection, aligned with the approach lane direction",
+      "pose": "Stationary, wheels aligned straight within the lane",
+      "action": "Remain completely stationary behind the stop line while the signal on their approach displays red and perpendicular traffic is actively flowing through the intersection. No vehicle crosses the stop line during this phase. When the cross-street signal turns red and all perpendicular traffic has cleared the intersection box, this approach signal changes to green. The lead vehicle then begins to move first, followed sequentially by each vehicle behind with realistic reaction delays. Vehicles accelerate gradually and pass through the now-empty intersection box without conflict.",
+      "state_changes": "Transitions from a stationary queue — held by red while cross traffic flows — to sequential ordered departure once the intersection box is fully clear and their signal is green",
+      "number_of_subjects": "Multiple vehicles, 4-8"
+    },
+    {
+      "description": "Vehicles traveling through the intersection from the perpendicular direction on a green signal",
+      "appearance_details": "Moving vehicles visible from above, occupying the cross-street lanes",
+      "relationship": "Cross traffic — vehicles moving perpendicular to the queued approach, active only during their own signal phase",
+      "location": "Cross-street lanes visible in the provided image",
+      "relative_size": "Vehicles appear similar in size to the queued vehicles from overhead",
+      "orientation": "Facing along the cross-street direction, perpendicular to the queued approach",
+      "pose": "Upright, wheels contacting the road, moving forward",
+      "action": "Flow continuously through the intersection box at steady, normal speed while their signal is green and the opposing approach is held at red. All perpendicular vehicles complete their passage and clear the intersection box fully before their signal changes to red. Once their signal turns red, all perpendicular vehicles stop behind their respective stop lines and remain stationary for the remainder of the clip. At no point do perpendicular vehicles and the queued approach vehicles occupy the intersection box simultaneously.",
+      "state_changes": "Transitions from continuous flow through a clear intersection to a full stop behind the stop line — the two traffic flows are strictly phase-separated and never overlap in the intersection box",
+      "number_of_subjects": "Multiple vehicles, 3-6"
+    }
+  ],
+  "background_setting": "A four-way signalized intersection viewed from a fixed elevated surveillance camera. Lane markings, directional arrows, stop lines, pedestrian crossings, and traffic signal heads are clearly visible throughout. Traffic signals alternate in strict phase separation: when one approach direction has a green signal, all perpendicular approaches display red and no vehicle from those directions enters the intersection box. Vehicles from different directions never occupy the intersection box at the same time. All scene geometry, camera angle, and background elements are preserved exactly. Use the provided image as the exact first frame.",
+  "lighting": {
+    "conditions": "Consistent daylight as established in the provided image",
+    "direction": "Overhead natural light, stable throughout the clip",
+    "shadows": "Short vehicle shadows consistent with overhead sun angle visible in the seed image",
+    "illumination_effect": "Even, stable illumination across the intersection surface with good visibility of all markings and vehicles",
+    "sky": "Clear or lightly overcast daytime sky, consistent with the seed image"
+  },
+  "aesthetics": {
+    "composition": "Fixed overhead intersection framing, matching the seed image",
+    "color_scheme": "Natural daylight tones — gray asphalt, painted lane markings, varied vehicle colors",
+    "mood_atmosphere": "Routine, orderly daytime traffic flow",
+    "patterns": "Repeating lane markings, crosswalk stripes, sequential vehicle departure"
+  },
+  "cinematography": {
+    "camera_motion": "Fixed — the camera does not pan, tilt, or zoom",
+    "framing": "Wide overhead establishing shot of the full intersection",
+    "camera_angle": "Elevated, near-top-down surveillance angle",
+    "depth_of_field": "Deep — all lanes and vehicles remain in focus",
+    "focus": "Uniformly sharp across the intersection",
+    "camera_preservation": "Use the provided image as the exact first frame and preserve its perspective and framing throughout"
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic daytime traffic-surveillance footage",
+  "context": "Normal, rule-abiding traffic flow through a signalized intersection with correctly phase-separated approaches",
+  "negative_prompt": "collision, running a red light, wrong-way driving, vehicles overlapping in the intersection box simultaneously, teleporting vehicles, flickering, camera motion, pan, tilt, zoom, added pedestrians, added signage, nighttime, changed lane markings"
+}

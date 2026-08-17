@@ -1,0 +1,54 @@
+{
+  "subjects": [
+    {
+      "description": "A vehicle approaching the intersection at speed and failing to stop at a red traffic signal",
+      "appearance_details": "Single vehicle viewed from overhead — rooftop and shadow visible, moving faster than surrounding traffic",
+      "relationship": "Primary subject — the red-light-running vehicle initiating the conflict",
+      "location": "Approaches from one of the controlled lanes visible in the provided image",
+      "relative_size": "Single vehicle viewed from overhead, similar scale to other vehicles in the scene",
+      "orientation": "Facing toward and through the intersection along its approach lane",
+      "pose": "Upright, wheels contacting the road, moving forward at speed",
+      "action": "Approaches the stop line at above-normal speed without any deceleration. Crosses the stop line and pedestrian crossing while the traffic signal remains red, entering the intersection box at speed. Continues through without stopping and exits the far side.",
+      "state_changes": "Maintains speed throughout — no braking or deceleration visible at the stop line — and clears the intersection without stopping",
+      "number_of_subjects": "One vehicle"
+    },
+    {
+      "description": "Cross-traffic vehicles that have a green signal and are moving through the intersection simultaneously",
+      "appearance_details": "Multiple vehicles in perpendicular lanes, viewed from above, moving at normal speed",
+      "relationship": "Cross traffic — vehicles with right-of-way reacting to the violation",
+      "location": "Perpendicular approach lanes and intersection box",
+      "relative_size": "Multiple vehicles of similar overhead scale to the primary subject",
+      "orientation": "Facing along the cross-street direction, perpendicular to the violating vehicle",
+      "pose": "Upright, wheels contacting the road; transitions to hard-braking posture with slight lateral steering",
+      "action": "Enter the intersection on a green signal at normal speed. React to the red-light-running vehicle with sudden hard braking and slight lateral steering to avoid a collision. One or more vehicles come to a complete stop within the intersection box. After the running vehicle clears, traffic resumes cautiously.",
+      "state_changes": "Transitions from normal green-light movement to emergency braking and evasive maneuvering, then gradual cautious resumption",
+      "number_of_subjects": "Multiple vehicles, 2-4"
+    }
+  ],
+  "background_setting": "A four-way signalized intersection viewed from a fixed elevated surveillance camera. The traffic signal visible in the scene remains red for the approaching violating vehicle throughout the event. Lane markings, stop lines, pedestrian crossings, and signal heads are clearly visible. All scene geometry and camera perspective are preserved exactly. Use the provided image as the exact first frame.",
+  "lighting": {
+    "conditions": "Consistent daylight as established in the seed image",
+    "direction": "Overhead natural light, stable throughout",
+    "shadows": "Short vehicle shadows consistent with overhead lighting in the seed image",
+    "illumination_effect": "Clear, even illumination providing good visibility of all vehicles, their speeds, lane markings, and signal states",
+    "sky": "Clear or lightly overcast daytime sky, consistent with the seed image"
+  },
+  "aesthetics": {
+    "composition": "Fixed overhead intersection framing, matching the seed image",
+    "color_scheme": "Natural daylight tones — gray asphalt, painted lane markings, varied vehicle colors",
+    "mood_atmosphere": "Tense, sudden hazard within an otherwise routine daytime scene",
+    "patterns": "Sharp contrast between the speeding violator and the abrupt braking of cross traffic"
+  },
+  "cinematography": {
+    "camera_motion": "Fixed — the camera does not pan, tilt, or zoom",
+    "framing": "Wide overhead establishing shot of the full intersection",
+    "camera_angle": "Elevated, near-top-down surveillance angle",
+    "depth_of_field": "Deep — all lanes and vehicles remain in focus",
+    "focus": "Uniformly sharp across the intersection",
+    "camera_preservation": "Use the provided image as the exact first frame and preserve its perspective and framing throughout"
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic daytime traffic-surveillance footage",
+  "context": "A vehicle runs a red light and crosses paths with cross traffic that has right-of-way, forcing evasive braking with no collision",
+  "negative_prompt": "actual collision or contact between vehicles, vehicle stopping at the red light, multiple vehicles running the red light, teleporting vehicles, flickering, camera motion, pan, tilt, zoom, added pedestrians, added signage, nighttime, changed lane markings"
+}
