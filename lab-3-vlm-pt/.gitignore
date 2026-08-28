@@ -1,0 +1,2 @@
+# builder kept out of the lab repo (generates lab_3.ipynb)
+build_notebook.py
