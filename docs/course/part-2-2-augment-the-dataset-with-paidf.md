@@ -1,87 +1,134 @@
-# Part 2.2: Augment the Dataset With PAIDF
-
+# Part 2.2: Expanding your Dataset With PAIDF
 Part 2.1 left you with a working pipeline and a gap: the verifier misses events
 it hasn't seen enough of. Collisions and stalled vehicles are, fortunately,
 rare — which is exactly what makes them hard to collect training data for.
-
 The NVIDIA Physical AI Data Factory closes that gap two ways. You can
 *generate* an anomaly that never happened from a single camera frame, or you
-can *re-shoot* footage you already have under weather and lighting you don't.
+can *augment* existing footage with new weather and lighting conditions.
 This walkthrough does one of each.
-
 ```{nvlearning-meta}
 - **Level:** Intermediate
 - **Tracks:** Two independent tracks, completable in either order
-- **Generation time:** About 3.7 minutes per EVG run
-- **Working directory:** `skill_walkthrough/`
+- **Generation time:** About 4 minutes per EVG clip; about 18–20 minutes for the 7-second VDA augmentation plus auto-labeling, once endpoints are ready
+- **Working directory:** `/dli/task/Part-2/`
 ```
-
 ## Learning Objectives
-
 ```{nvlearning-objectives}
-- **Install** and read the two PAIDF local agent skills.
-- **Evaluate** a seed image and a cookbook sampling configuration before running a generation job.
+- **Load** and read the two PAIDF local agent skills.
+- **Evaluate** a seed image and a sample generation configuration before running a generation job.
 - **Generate** a traffic-anomaly video from a single seed frame with Event Video Generation.
 - **Augment** an existing clip into new weather and time-of-day conditions with Video Data Augmentation.
-- **Verify** generated output against the attribute verification table and the cookbook's documented failure modes.
+- **Verify** generated output against the attribute verification table and the generation config's documented failure modes.
 ```
-
-## The Two Tracks
-
+This walkthrough has two independent tracks:
 | Track | Pipeline | What it produces | Skill used |
 |---|---|---|---|
 | **A** | Event Video Generation (EVG) | A new traffic-anomaly video (a vehicle accident or a stalled vehicle) from a single camera frame | `physical-ai-event-video-generation-local` |
-| **B** | Video Data Augmentation (VDA) | An existing traffic clip re-shot in different weather and time of day, plus auto-labels | `physical-ai-video-data-augmentation-local` |
+| **B** | Video Data Augmentation (VDA) | An existing traffic clip augmented for a different weather/time of day, plus auto-labels | `physical-ai-video-data-augmentation-local` |
+Do them in either order. Each track follows the same shape:
+1. Understand the workflow input
+2. Deploy the pipeline's model endpoints
+3. Generate or augment one video
+4. Review the result and its validation checks
+5. Release persistent endpoint containers when they are no longer needed
+---
+## Load the skills
 
-Do them in either order. Each track follows the same shape: deploy the
-pipeline's model endpoints, generate one new video, then review the result
-against pre-generated reference videos.
+Open the Part-2 Directory `cd /dli/task/Part-2/` as its working directory. Its
+`skills/` subdirectory already contains both skills this lab uses. 
 
-:::{warning}
-**GPU reality check.** A local EVG deploy needs 2× H100-class GPUs minimum —
-one for Cosmos3-Nano, one for Nemotron. VDA needs one free GPU. If you don't
-have that available, ask the agent for hosted endpoints instead.
-:::
-
-## Step 1: Install the Skills
-
-Open your agent in the `skill_walkthrough/` directory. Its `skills/`
-subdirectory already contains both skills this lab uses — nothing to clone or
-register. Paste into the agent:
-
-```text
+```
 Read skills/physical-ai-event-video-generation-local/SKILL.md and
 skills/physical-ai-video-data-augmentation-local/SKILL.md. Confirm you've
 read both.
 ```
+---
 
-## Step 2: Review the Reference Assets
+## Track A — Event Video Generation
+### The EVG seed frame
+![Traffic-camera seed image used for EVG](traffic_cam.png)
+EVG begins with a **seed image**: a still image that establishes the scene,
+camera viewpoint, objects, and visual context from which the model generates
+motion and an event over time. A seed image can come from an existing image
+or video frame, or EVG can generate a new seed image when one is not
+available.
 
-Do this before you generate anything. Both pipelines are cheap to run and
-expensive to run *wrong*, and in both cases the judgment call happens before
-the job starts.
+### Deploy the model endpoints
+```
+Run preflight for physical-ai-event-video-generation-local, then deploy
+the model endpoints it needs.
+```
+Deploys Nemotron 3 Nano Omni (VLM) and Cosmos 3 Nano, or prints hosted
+export lines if you ask for `--hosted`. **GPU reality check:** local deploy
+needs 2× H100-class GPUs minimum (1 for Cosmos3-Nano, 1 for Nemotron) you 
+can set up the workflow with hosted endpoints if needed.
 
-### The EVG Seed Frame
+### Generate a traffic-anomaly video
+```
+Generate one clip of a stalled vehicle on an urban road using
+`/dli/task/Part-2/traffic_cam.png` as the seed image, seed 43.
+```
 
-EVG needs one fixed-view traffic-cam frame per run — a highway, an
-intersection, a parking lot. Ask the agent to open one and describe what makes
-it usable: **wide fixed angle**, **visible lanes**, and **no camera hardware or
-timestamps in frame**.
+The skill maps the requested seed image, incident type, environment, and seed
+into the road-event configuration, then builds a concrete temporal prompt for
+Cosmos I2V. Other supported traffic incidents, such as a vehicle accident,
+can be requested by changing the incident in the prompt. Once both endpoints
+are ready, expect roughly 4 minutes end to end, dominated
+by about 193 seconds of Cosmos I2V inference. Endpoint startup, image pulls,
+or an uncached model download add time. Each run produces four files:
+```
+paidf_outputs/evg/<run-name>/
+├── traffic_cam_vehicle_stopped_000.mp4
+├── traffic_cam_vehicle_stopped_000_prompt.txt
+├── traffic_cam_vehicle_stopped_000_metadata.json
+└── traffic_cam_vehicle_stopped_000_evaluation.json
+```
+### Review the result
+```
+Evaluate the result — show me the prompt that was sent to Cosmos I2V and
+the verification pass/fail table.
+```
 
-EVG's per-run choices are just `anomaly_type` (`vehicle_stopped` or
-`accident`) and one fixed `env_type` — both spelled out in the prompts below,
-so there's no config worth reading first. The seed frame itself is the only
-real judgment call.
+Read back the exact prompt Cosmos I2V received and the
+`attribute_verification`/evaluation pass-fail table — a VLM-answered check
+on whether the requested anomaly, environment, and visual clarity actually
+show up. A failed check means regenerate with a different seed, not ship
+as-is.
 
-### The VDA Cookbook
+### Release the EVG resources
 
-VDA uses the `city_traffic` cookbook — an elevated camera over a multi-lane
-intersection. Ask the agent to pull a frame from the demo clip (or your own
-footage) the same way you just did for EVG's seed image.
+Generation and annotation workers remove themselves when they finish, but
+the Nemotron and Cosmos endpoint containers stay up and continue reserving
+their GPUs. If you are moving directly to Track B, keep Nemotron running for
+reuse and stop only Cosmos. Otherwise, stop both endpoints.
 
-Then look at the cookbook's actual sampling config rather than its full README.
-`assets/cookbooks/city_traffic/workflow_config.yaml` is short enough to read
-directly:
+If you are continuing to Track B:
+
+```
+Spin down only the EVG `cosmos3-nano` container to release its GPU, and keep
+`nemotron-nim` running for VDA. Preserve all images, caches, and outputs.
+```
+
+If you are finished with both tracks:
+
+```
+Spin down both EVG endpoint containers to release their GPUs. Preserve all
+images, caches, and outputs.
+```
+
+---
+## Track B — Video Data Augmentation
+### The VDA input video and augmentation settings
+<video controls width="832" src="input.mp4"></video>
+
+VDA begins with an **input video** whose scene layout, subjects, and motion
+provide the structure for a new version of the clip. The pipeline uses that
+source while changing selected visual conditions—such as weather or time of
+day so the output remains recognizable as the same scene and activity.
+
+You can view a sample generation config at
+`skills/physical-ai-video-data-augmentation-local/assets/cookbooks/city_traffic/workflow_config.yaml`.
+It defines one augmentation and weighted default choices for weather and time of day:
 
 ```yaml
 augmentation:
@@ -97,169 +144,84 @@ augmentation:
       evening: 0.25
       night: 0.25
 ```
+The agent uses this sample config as a base, and customizes it from the
+user's prompt. Explicitly requesting values such as `clear` and `night`
+overrides the weights; otherwise the skill samples from these defaults.
+Also review the generation config's relevant failure modes before judging results:
+overpass shadows can confuse lighting assessment, and ambiguous signal
+states can produce noisy red-light-violation labels. If you use your own
+traffic footage, provide its local path instead of the demo clip.
 
-That's what actually drives a run: `weather` and `time_of_day` are sampled from
-these weights unless you force one.
-
-Ask the agent to also pull the cookbook's documented failure modes from its
-README — a couple of lines, not the whole file. For `city_traffic` these are
-**overpass shadow confusing lighting assessment** and **ambiguous signal state
-producing noisy red-light-violation calls**. You'll cross-check the auto-labels
-against these later, so it's worth knowing them now rather than discovering
-them after the fact.
-
-If you have your own traffic footage, give the agent the local path instead of
-the demo clip.
-
-## Track A: Event Video Generation
-
-### Step 3: Deploy the Model Endpoints
-
-```text
-Run preflight for physical-ai-event-video-generation-local, then deploy
-the model endpoints it needs.
+### Deploy the model endpoint
 ```
-
-This deploys Nemotron 3 Nano Omni (VLM) and Cosmos 3 Nano, or prints hosted
-export lines if you ask for `--hosted`.
-
-### Step 4: Generate a Traffic-Anomaly Video
-
-```text
-Set up the EVG run directory with my seed images at /path/to/seed_images,
-then generate a clip of a stalled vehicle on an elevated highway using
-highway.png as the seed image, seed 42.
-```
-
-Or ask for the other supported type:
-
-```text
-Generate a clip of a vehicle accident on an elevated highway using
-highway.png as the seed image.
-```
-
-**Expected:** roughly 3.7 minutes end to end, dominated by about 193 seconds of
-Cosmos I2V inference. Each run produces four files:
-
-```text
-data/out/
-├── highway_vehicle_stopped_000.mp4
-├── highway_vehicle_stopped_000_prompt.txt
-├── highway_vehicle_stopped_000_metadata.json
-└── highway_vehicle_stopped_000_evaluation.json
-```
-
-### Step 5: Review the Result
-
-```text
-Evaluate the result — show me the prompt that was sent to Cosmos I2V and
-the verification pass/fail table.
-```
-
-Read back the exact prompt Cosmos I2V received and the
-`attribute_verification` evaluation pass/fail table — a VLM-answered check on
-whether the requested anomaly, environment, and visual clarity actually show up.
-
-:::{important}
-A failed check means regenerate with a different seed. It does not mean ship
-as-is. Synthetic data that doesn't contain the event you asked for is worse
-than no data, because it teaches the model the wrong thing.
-:::
-
-Optionally annotate the clip:
-
-```text
-Run annotation on the video I just generated.
-```
-
-## Track B: Video Data Augmentation
-
-### Step 6: Deploy the Model Endpoint
-
-```text
 Run preflight for physical-ai-video-data-augmentation-local, then deploy
 the model endpoint it needs.
 ```
-
-This deploys Nemotron 3 Nano Omni as a single shared VLM and LLM endpoint, or
+Deploys Nemotron 3 Nano Omni as a single shared VLM+LLM endpoint (needs 1 free GPU), or
 reuses the instance Track A already started if you ran that first.
+Cosmos Transfer is not a separate endpoint in this flow; the skill loads it
+inside the augmentation container when you submit the generation request.
+### Augment the clip with different conditions
 
-### Step 7: Re-Shoot the Clip in Different Conditions
-
-```text
-Set up a run for the city_traffic cookbook using the VDA demo video (or my
-video at <path>), then generate a clear, nighttime version of it.
+```
+Run only the augmentation stage on `/dli/task/Part-2/input.mp4` using the
+`city_traffic` generation config, transforming it into a clear nighttime scene.
 ```
 
 Then auto-label the result:
 
-```text
-Now auto-label the augmented clip.
+```
+Auto-label the validated augmented clip from the run you just completed, then
+publish the completed run to `paidf_outputs`.
 ```
 
-Two things worth knowing before this runs:
+Once the endpoint is ready, expect roughly 16 minutes for augmentation and
+3 minutes for auto-labeling on this 7-second clip. Around 18–20 minutes
+total.
 
-- **There is no pre-populated model cache.** Cosmos Transfer weights download
-  on first run into your local Hugging Face cache. The first run is slower than
-  later ones, and you'll need disk space plus the gated Cosmos weights' license
-  accepted.
-- **Augmentation and auto-labeling each need a GPU.** No local GPU? Ask for
-  hosted endpoints instead.
+### View the result
 
-### Step 8: Review the Result
+Successful runs are published under
+`/dli/task/Part-2/paidf_outputs/vda/<run-name>/<video-name>_aug0/`. View the
+generated clip in `augmented/augmented_video.mp4` and the labeled tracking
+overlay in `labeled/sidecars/augmented_video_tracking_red_id.mp4`.
 
-```text
-Show me what got generated and render a side-by-side comparison against
-the original.
+```
+Show me the generated prompt and metadata from the published VDA run, including
+the selected conditions and validation results.
 ```
 
-This prints the sampled `weather` and `time_of_day` from `metadata.json`,
-summarizes the auto-labeling output — detection and tracking, per-track
-attributes, scene captions, and the anomaly-category vote across 10 event types
-in 4 categories (`collision`, `near_miss`, `anomaly`, `normal_traffic`) — and
-renders a side-by-side comparison video.
+The prompt and metadata explain what the model was asked to generate and
+whether the result passed its hallucination and attribute checks. 
 
-Cross-reference the labels against the `city_traffic` cookbook's documented
-failure modes from Step 2. Treat auto-labels as a starting point for review,
-not as ground truth.
+As an optional convenience, you can ask the agent to create a browser-ready viewer to see the various generations:
 
-```{nvlearning-checkpoint} Checkpoint 2
-- Both PAIDF skills read and confirmed by the agent.
-- Seed frame and cookbook sampling config reviewed before generation.
-- Track A: one anomaly video generated from a seed frame, with its prompt and attribute verification table reviewed.
-- Track B: one augmented clip generated and auto-labeled, with labels cross-checked against the cookbook's documented failure modes.
+```
+Create a self-contained HTML viewer for the published original, augmented,
+and labeled videos, using embedded browser-compatible MP4s so they remain visible.
 ```
 
-## Troubleshooting
+### Release the VDA resources
 
-| It reports | What is actually true |
-|---|---|
-| Preflight fails on available GPUs | Local EVG needs two H100-class GPUs, VDA needs one. Request hosted endpoints instead of deploying locally. |
-| The first VDA run is far slower than expected | There is no pre-populated model cache. Cosmos Transfer weights download into the local Hugging Face cache on first run only. |
-| Cosmos Transfer weights fail to download | The Cosmos weights are gated. Accept the license and confirm sufficient local disk space. |
-| `attribute_verification` shows a failed check | The requested anomaly, environment, or visual clarity did not show up in the output. Regenerate with a different seed. |
-| Auto-labels report odd lighting on an overpass | A documented `city_traffic` failure mode: overpass shadow confuses lighting assessment. |
-| Auto-labels report noisy red-light violations | A documented `city_traffic` failure mode: ambiguous signal state. |
+Augmentation and auto-labeling workers clean themselves up, but the Nemotron
+endpoint remains running after the flow and continues to reserve its GPU.
 
-## Beyond This Lab: OSMO and Kubernetes
+```
+Spin down the VDA containers to release their GPUs, including the persistent
+`nemotron-nim` endpoint. Preserve all images, caches, run directories, and
+published outputs.
+```
 
-Neither track uses OSMO by default.
-`physical-ai-video-data-augmentation-local` is a local-Docker counterpart of
-the upstream `physical-ai-video-data-augmentation` skill, which submits work to
-an OSMO cluster instead. Same worker scripts, cookbooks, and container images —
-only the orchestration layer differs (`docker run` versus
-`osmo workflow submit`). If you get access to an OSMO cluster, switch to the
-upstream skill; every prompt in this walkthrough works unchanged against it.
-
-EVG has two other execution paths this walkthrough doesn't cover: an
-Airflow-DAG-on-Kubernetes path
-(`paidf-orchestration/skills/physical-ai-event-video-generation/`, JSON
-payload, `anomaly_dataset/` output layout) for Kubernetes and Airflow
-environments, and the gated NGC skill bundle.
-
-## What's Next
-
-You now have the two data-generation levers that feed a training set. In
-[Part 2.3: Fine-Tune for Alert Verification With TAO](part-2-3-fine-tune-for-alert-verification-with-tao)
-you measure exactly what the base model gets wrong, then fine-tune it on the
-traffic dataset and prove the improvement.
+---
+## Scaling up generations
+This walkthrough runs PAIDF on one machine with local Docker containers,
+which is a good fit for small numbers of videos. To generate
+larger datasets, **Kubernetes (K8s)** can coordinate containers across a GPU
+cluster, while **OSMO** provides a workflow layer for submitting, scheduling,
+and monitoring many PAIDF jobs on that shared infrastructure. These scaled
+workflows are available from NVIDIA on GitHub: the
+[OSMO-based VDA workflow](https://github.com/NVIDIA/physical-ai-data-factory/tree/main/skills/physical-ai-video-data-augmentation)
+is part of the [Physical AI Data Factory repository](https://github.com/NVIDIA/physical-ai-data-factory),
+and the [Kubernetes/Airflow EVG workflow](https://github.com/NVIDIA/paidf-orchestration/tree/main/skills/physical-ai-event-video-generation)
+is part of [PAIDF Orchestration](https://github.com/NVIDIA/paidf-orchestration).
+The [OSMO platform](https://github.com/NVIDIA/OSMO) is also open source.
