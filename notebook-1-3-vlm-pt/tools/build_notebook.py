@@ -408,40 +408,16 @@ PTM        = Path(os.environ.get("DLI_PTM",        BASE / "models" / "Cosmos3-Na
 CACHE_DIR  = Path(os.environ.get("DLI_CACHE",      BASE / "cache"))
 SKILL_BANK = Path(os.environ.get("DLI_SKILL_BANK", BASE / "tao-skill-bank"))
 
-# The TAO Skill Bank is the packaged reference for the Cosmos-Reason workflows and
-# is used again in Part 2 of the day. A copy is staged with the course data; if it
-# is missing or incomplete, the pinned 7.2.0 tag is cloned next to it instead.
-# Training and evaluation in this notebook do not depend on it.
+# The TAO Skill Bank is used again in Part 2 of the day. If the staged copy is missing
+# or incomplete, the pinned tag is cloned next to it. This notebook does not depend on it.
 SKILL_BANK = H.ensure_skill_bank(SKILL_BANK)
 H.check(f"TAO Skill Bank {H.SKILL_BANK_REF}", H.skill_bank_complete(SKILL_BANK), str(SKILL_BANK))
 
 if BUILD_PTM and not sorted(PTM.glob("*.safetensors")):
     H.ensure_ptm(PTM, CACHE_DIR, SKILL_BANK)
 
-shards = sorted(PTM.glob("*.safetensors"))
-# The loader copies the checkpoint file by file, so "some shards exist" is not "the
-# checkpoint is here". The index names every shard the model needs; require all of them.
-_index = PTM / "model.safetensors.index.json"
-_expected = sorted(set(json.loads(_index.read_text())["weight_map"].values())) if _index.exists() else []
-_present = {p.name for p in shards}
-_missing_shards = [s for s in _expected if s not in _present]
-_complete = bool(shards) and not _missing_shards and (PTM / "config.json").exists()
-if H.check(f"base checkpoint at {PTM}", _complete,
-           f"{len(shards)} shards" + (f", {len(_missing_shards)} still missing" if _missing_shards else "")):
-    cfg = json.loads((PTM / "config.json").read_text())
-    print(f"       model_type={cfg['model_type']}  arch={cfg['architectures'][0]}")
-    print(f"       hidden={cfg.get('text_config', cfg).get('hidden_size')}  "
-          f"layers={cfg.get('text_config', cfg).get('num_hidden_layers')}")
-    # The container runs as your uid; unreadable shards surface as a confusing
-    # "No such file or directory" much later, so check readability now.
-    try:
-        shards[0].open("rb").read(8)
-        H.check("checkpoint readable by this user", True)
-    except PermissionError:
-        H.check("checkpoint readable by this user", False, "run: chmod -R u+r <ptm>")
-else:
-    raise RuntimeError(f"No base checkpoint under {PTM}. The course loader stages it before the lab starts - "
-                       "wait for it to finish or ask a TA. (On another machine: set BUILD_PTM = True with HF_TOKEN exported.)")
+# Every shard named by the index must be present and readable; raises with guidance if not.
+H.verify_checkpoint(PTM)
 """)
 
 md(r"""

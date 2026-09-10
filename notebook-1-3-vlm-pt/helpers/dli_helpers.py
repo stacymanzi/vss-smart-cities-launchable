@@ -177,6 +177,37 @@ def ensure_skill_bank(path, ref=SKILL_BANK_REF):
     return path
 
 
+def verify_checkpoint(ptm):
+    """Check that a converted checkpoint is complete and readable, and print its shape.
+
+    The loader copies files one by one, so "some shards exist" is not "the checkpoint
+    is here": every shard named by the index must be present. Raises with guidance
+    when it is not, because nothing later in the lab can run without it."""
+    ptm = Path(ptm)
+    shards = sorted(ptm.glob("*.safetensors"))
+    index = ptm / "model.safetensors.index.json"
+    expected = sorted(set(json.loads(index.read_text())["weight_map"].values())) if index.exists() else []
+    missing = [x for x in expected if x not in {q.name for q in shards}]
+    complete = bool(shards) and not missing and (ptm / "config.json").exists()
+    detail = f"{len(shards)} shards" + (f", {len(missing)} still missing" if missing else "")
+    if not check(f"base checkpoint at {ptm}", complete, detail):
+        raise RuntimeError(
+            f"No complete base checkpoint under {ptm}. The course loader stages it before the lab "
+            "starts - wait for it to finish or ask a TA. (Elsewhere: set BUILD_PTM = True with HF_TOKEN exported.)")
+    cfg = json.loads((ptm / "config.json").read_text())
+    text = cfg.get("text_config", cfg)
+    print(f"       model_type={cfg['model_type']}  arch={cfg['architectures'][0]}  "
+          f"hidden={text.get('hidden_size')}  layers={text.get('num_hidden_layers')}")
+    # The container runs as this user; an unreadable shard surfaces much later as a
+    # confusing "No such file or directory", so check readability now.
+    try:
+        shards[0].open("rb").read(8)
+        check("checkpoint readable by this user", True)
+    except PermissionError:
+        check("checkpoint readable by this user", False, "run: chmod -R u+r <ptm>")
+    return cfg
+
+
 def helper_dir(skill_bank):
     """Directory holding the packaged single-GPU train/evaluate helpers."""
     d = Path(skill_bank) / HELPER_SUBDIR
