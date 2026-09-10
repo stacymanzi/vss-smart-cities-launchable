@@ -205,7 +205,6 @@ def verify_checkpoint(ptm):
         check("checkpoint readable by this user", True)
     except PermissionError:
         check("checkpoint readable by this user", False, "run: chmod -R u+r <ptm>")
-    return cfg
 
 
 def helper_dir(skill_bank):
