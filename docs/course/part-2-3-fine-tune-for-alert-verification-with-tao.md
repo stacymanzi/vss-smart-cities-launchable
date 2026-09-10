@@ -52,8 +52,9 @@ owns that step.
 
 Everything under `/dli/task/data` is visible at the same path from your terminal
 and from the Docker daemon (which runs in a separate `dind` container, reached
-through `DOCKER_HOST`). That is the one path the daemon can bind-mount, so your
-workspace lives there too.
+through `DOCKER_HOST`). That is the only tree the daemon can bind-mount, which is
+why the workspace lives there: anything written elsewhere is invisible to the
+container.
 
 ### The Recipe
 
@@ -74,15 +75,19 @@ agent explicitly.
 
 ### Expected Times
 
-Container run times; the agent adds a minute or two of planning around each.
+Container run times, and the whole prompt including the agent's planning,
+launch and reporting (measured with the prompts on this page).
 
-| Stage | 2 × H100 | 1 × RTX PRO 6000 (96 GB) |
-|---|---|---|
-| Zero-shot evaluation | ~1 min | ~0.7 min |
-| LoRA fine-tuning | ~4.5 min | ~6.5 min |
-| Fine-tuned evaluation | ~1.5 min | ~1.2 min |
-| Merge | ~1 min | ~0.7 min |
-| Merged-checkpoint evaluation | ~1 min | ~1 min |
+| Step | Container, 2 × H100 | Container, 1 × RTX PRO 6000 | Whole prompt |
+|---|---|---|---|
+| 4 Zero-shot evaluation | ~1 min | ~0.7 min | ~3.5 min |
+| 5 Plan, review and fine-tune | ~4.5 min | ~7 min | container + ~3 min |
+| 6 Fine-tuned evaluation | ~1.5 min | ~1.5 min | ~3 min |
+| 7 Merge and verify | ~2 min | ~1.5 min | ~4 min |
+
+About 20 minutes end to end on this machine class. The prompts are written to
+keep the agent's share of that small: the earlier, sparser prompts measured
+roughly twice as long, almost all of it agent time (see the note under Step 4).
 
 ### Three Things Worth Knowing Before You Prompt
 
@@ -104,7 +109,7 @@ clips for three epochs and fits comfortably; the prompts say so, and the agent
 proceeds. The disk figure deserves respect even so: each full training
 checkpoint Cosmos-RL writes is about **66 GB**, and it retains two. A run that
 fills the disk fails while saving a checkpoint, with the rather opaque message
-`basic_ios::clear: iostream error`. Step 9 removes these checkpoints once the
+`basic_ios::clear: iostream error`. Step 8 removes these checkpoints once the
 adapter has been merged.
 
 **Running as root.** The TAO Docker skill refuses to run a container as `root`
@@ -148,10 +153,10 @@ them.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/NVIDIA-TAO/tao-skill-bank/main/scripts/install-codex-agents.sh | bash
-codex plugin list
 ```
 
-**Expected:** `tao-skill-bank` listed as installed and enabled.
+**Expected:** about 5 seconds, ending with `Installed TAO agent identity` and
+`Done. Launch 'codex' from any directory to use the TAO skill bank.`
 
 ## Step 3: Start the Agent
 
@@ -173,37 +178,45 @@ Paste into Codex:
 ```text
 Using the TAO skills, evaluate the base Cosmos 3 Nano checkpoint at
 /dli/task/data/lab3/models/Cosmos3-Nano-VLM on the validation split in
-/dli/task/data/lab3/dataset/val.
+/dli/task/data/lab3/dataset/val, writing everything under the current directory.
 
-Use the Cosmos-RL backend (cosmos-rl-evaluate) with qwen3_vl_patch_embed set to
-linear, 8 frames per clip, model_max_length 40960, and the system prompt from
-dataset_info.json.
+Use these verified settings and do not probe for them:
+- image: nvcr.io/nvidia/tao/tao-toolkit:7.2.0-cosmos-rl (already present, never pull)
+- GPUs: 0 and 1
+- run as root, with -w /results and --shm-size=32g --ipc=host
+- env: TAO_API_JOB_ID=<job name>, TAO_API_RESULTS_DIR=/results, HF_HUB_OFFLINE=1
+- mounts: checkpoint at /ptm (read-only), val split at /val (read-only), results directory at /results
+- command: cosmos-rl-evaluate --config /results/config.toml
+- spec: start from /dli/task/lab-3-vlm-pt/configs/eval_config.toml and set only
+  model.model_name=/ptm, model.base_model_path=/ptm, model.enable_lora=false,
+  dataset.annotation_path=/val/annotations_augmented.json,
+  dataset.system_prompt from dataset_info.json, num_gpus=2
+- no credentials are needed
 
-Score each answer by the class it names - collision, stalled or none - and treat
-collision and stalled together as the positive class. Report macro-F1 over positive
-vs none, precision, recall, clips detected per class, and accuracy per capture
-condition.
+Launch it, then wait for the container to exit with docker wait - do not read
+or stream the log while it runs. Then score results.json: each answer counts as
+the class it names (collision, stalled or none; anything else is none), and
+collision and stalled together are the positive class. Report macro-F1 over
+positive vs none, precision, recall, clips detected per class, and accuracy per
+capture condition.
 
 Then tell me in two sentences what kind of gap this is.
 ```
 
-The second paragraph is the only part of that prompt that is not plain intent.
-The agent can reach the same result without it — on this driver the default
-Conv3D patch embedding fails with `GET was unable to find an engine`, and the
-agent needs a few iterations of probing and retrying before it settles on the
-`linear` setting. Stating it up front saves that time; leaving it out is a
-reasonable way to observe how the agent troubleshoots.
+The bullet list is what makes this prompt fast. Every setting in it
+is something the agent would otherwise discover by reading skill files, probing
+the image, or launching a container that fails and retrying — and in our measured
+runs that discovery cost 5 to 14 minutes on a one-minute evaluation. Pointing at
+the validated spec that ships with the lab spares it rebuilding one from the
+skill's template — whose placeholder values fail on the first launch, and which
+defaults to CPU video decoding (`torchvision`) where the shipped spec uses the
+GPU decoder; in our measurement that difference alone made training three times
+slower (20 minutes instead of 6.5). Telling
+the agent *not* to read the log until the container exits removes the other
+large cost: streaming a training or evaluation log and reasoning about every
+chunk.
 
-The agent will ask a few questions before it launches; the answers are short:
-
-| It asks | Answer |
-|---|---|
-| Which checkpoint format, `qwen3_vl` or `cosmos3_omni`? | `qwen3_vl` — it is already converted. |
-| For an NGC key or Hugging Face token | None needed. The image is present in the daemon and nothing downloads. |
-| To run the container as a non-root user | The lab itself runs as root; run it as root. |
-| Where to write | The current directory. The daemon can only mount paths under `/dli/task/data`, which is why you are here. |
-
-**Expected (measured):** the agent shows you the `docker run`, waits for your
+**Expected (measured):** the agent shows you one `docker run`, waits for your
 approval, and evaluates for about a minute.
 
 | Metric | Value |
@@ -228,39 +241,43 @@ the model never predicts is something training addresses far more effectively
 than prompting.
 :::
 
-## Step 5: Review the Training Plan
+## Step 5: Plan, Review and Launch the Fine-Tuning Run
 
-Paste into Codex:
+One prompt covers the plan, the review and the launch. The agent stops once —
+at the `docker run` approval — and that pause is where you read the plan.
 
 ```text
-Plan a LoRA fine-tuning run of the same checkpoint on the training split in
-/dli/task/data/lab3/dataset/train, validating on the val split, on both GPUs.
+Fine-tune the same checkpoint with LoRA on the training split in
+/dli/task/data/lab3/dataset/train (annotations_augmented.json), validating on
+the val split, on both GPUs, with outputs under the current directory.
 
-Use LoRA rank 16, alpha 32 on q_proj and v_proj; 3 epochs; batch size 4;
-learning rate 1e-4; 8 frames per clip; one FSDP shard per GPU; and the same
-Cosmos-RL backend settings as the evaluation (qwen3_vl_patch_embed linear,
-model_max_length 40960).
+Settings, all verified for this environment:
+- spec: start from /dli/task/lab-3-vlm-pt/configs/train_config.toml
+- LoRA rank 16, alpha 32, on q_proj and v_proj
+- 3 epochs; train_batch_per_replica 4 with mini_batch 1; learning rate 1e-4
+- nframes 8; model_max_length 40960; dp_shard_size 2
+- custom.system_prompt from dataset_info.json; train and val annotation paths
+- container: same as the evaluation, plus the train split mounted read-only at /train
+- command: cosmos-rl --config /results/config.toml /opt/cosmos_rl/tao_sft_example.py
+  (the hook is a required positional argument)
+- this machine is below the skill's 256 GB GPU-memory and 384 GiB disk gates; the job
+  is validated here, so proceed past both without running preflight
 
-This machine is below the skill's 256 GB GPU-memory and 384 GiB disk gates for
-SFT. The job is 92 clips for three epochs and has been validated here, so
-proceed past both gates.
-
-Before launching anything, verify the training split - records per label, no clip
-in both train and val, every video present - and show me the launch review with a
-one-line reason for each setting.
+Then, in order:
+- verify the training split: records per label, no clip in both train and val,
+  every video present
+- show me the launch review with a one-line reason for each setting
+- launch, and wait for the container to exit with docker wait - do not read the
+  log while it runs
+- report the validation loss per epoch, the epoch selected as best, and the
+  adapter path
 ```
 
 **Expected:** 92 training records — 40 collision, 36 stalled, 16 none — from 46
-source clips, no overlap with val, all videos present. Then a settings table
-matching the recipe above, with the agent's reasoning for each row.
-
-The recipe is spelled out because it is known to work on this dataset in this
-time slot. You can instead leave the second paragraph out and ask the agent to
-choose the LoRA and optimizer settings itself, explaining each choice; that is
-the better first move on a dataset you have not trained on before. Expect it to
-take longer to converge on a good configuration, though — in our test the
-agent's own first choice (batch 1, a higher learning rate, adapters on every
-projection) trained unstably and had to be replaced with the recipe above.
+source clips, no overlap with val, all videos present; a settings table with the
+agent's reasoning; then the `docker run` approval prompt, about 4.5 minutes of
+training, three validation-loss lines, and the adapter under
+`.../safetensors/epoch_N/`.
 
 Two of the checks it runs are worth understanding, because both produce
 misleading errors when violated:
@@ -272,6 +289,14 @@ misleading errors when violated:
   checkpoint with `'NoneType' object has no attribute 'state_dict'` — an error
   that appears to concern checkpointing but is caused by the batch size.
 
+The recipe is spelled out because it is known to work on this dataset in this
+time slot. You can instead drop the settings paragraph and ask the agent to
+choose the LoRA and optimizer settings itself, explaining each choice; that is
+the better first move on a dataset you have not trained on before. Expect it to
+take longer to converge on a good configuration, though — in our test the
+agent's own first choice (batch 1, a higher learning rate, adapters on every
+projection) trained unstably and had to be replaced with the recipe above.
+
 :::{tip}
 Ask the agent what it would change. The learning rate is two orders of
 magnitude above the skill's default of `1e-6`, and a well-briefed agent will
@@ -280,21 +305,6 @@ large dataset it would need to be tuned, which is the subject of "Beyond This
 Lab".
 :::
 
-## Step 6: Launch
-
-Paste into Codex:
-
-```text
-Launch it. Stream the milestones as it runs - the validation loss at each epoch,
-checkpoint saves, and the safetensors export.
-
-When it finishes, tell me which epoch Cosmos-RL selected as best and where the
-adapter was written.
-```
-
-**Expected:** about 4.5 minutes; three validation-loss lines, one per epoch;
-`epoch_3` selected as best; the adapter under `.../safetensors/epoch_3/`.
-
 :::{only} internal
 While it trains, the instructor narrates: adapters on the attention projections
 only, frozen base weights, one FSDP shard per GPU, validation at the end of every
@@ -302,13 +312,15 @@ epoch, a 15 MB adapter instead of a 17 GB model. Note that only epochs 2 and 3
 remain on disk — checkpoint retention keeps two.
 :::
 
-## Step 7: Evaluate the Fine-Tuned Model
+## Step 6: Evaluate the Fine-Tuned Model
 
 Paste into Codex:
 
 ```text
-Evaluate the best adapter on the same validation clips, scored exactly as the
-zero-shot run was (class word with or without the LABEL= prefix; anomaly vs none).
+Evaluate the best adapter on the same validation clips with the same container
+settings and scoring as the zero-shot run (model.model_name = the adapter folder,
+model.enable_lora = true, model.base_model_path = /ptm). Wait for the container
+with docker wait; do not read the log while it runs.
 
 Show me before and after side by side: the metrics, how many clips of each class
 were detected, and accuracy per condition. List every clip that is still wrong.
@@ -343,7 +355,7 @@ The class gap is closed, and a small weather gap has appeared where there was
 none before. That residual is the specification for the next data run — exactly
 what Part 2.2 generates. This is the loop closing on itself.
 
-## Step 8: Merge for Deployment
+## Step 7: Merge for Deployment
 
 VSS serves a standard Hugging Face checkpoint rather than a base model with a
 separate adapter, and the Cosmos 3 Reasoner NIM has the same requirement.
@@ -359,16 +371,17 @@ Merge the best adapter into the base weights and write the merged checkpoint to
 /dli/task/data/models/Cosmos3-Nano-VLM-lora. If a checkpoint already exists there,
 leave it in place and skip the merge.
 
-Evaluate the checkpoint at that path on the same clips and confirm it scores
+Evaluate the checkpoint at that path on the same clips, mounted at /ptm with
+enable_lora false, waiting with docker wait as before, and confirm it scores
 identically to the adapter run.
 
 Report its size and shard count.
 ```
 
 **Expected:** about 1 minute to merge, 1.5 to evaluate; 17 GB in 4 shards;
-metrics identical to Step 7.
+metrics identical to Step 6.
 
-## Step 9: Clean Up
+## Step 8: Clean Up
 
 Training left two full checkpoints of about 66 GB each under the run directory.
 The merged checkpoint and the small adapter are all that later steps need.
@@ -382,7 +395,7 @@ Show me the disk space before and after.
 
 ```{nvlearning-checkpoint} Checkpoint 3
 - Part 2.2 endpoints stopped; both GPUs free.
-- TAO Skill Bank installed into Codex.
+- TAO Skill Bank installed into Codex (installer ended with `Done`).
 - Zero-shot baseline measured: precision 1.000, recall 0.500, `stalled` 0/32, the same in every condition.
 - Training split verified and the launch plan reviewed before approval.
 - LoRA fine-tuning completed; evaluated on the same clips: recall 1.000, macro-F1 up by about 0.23.
@@ -395,11 +408,12 @@ Show me the disk space before and after.
 
 | It reports | What is actually true |
 |---|---|
-| `codex plugin list` does not show `tao-skill-bank` | The installer needs network access to GitHub. Rerun it; if the lab's Codex lacks `codex plugin`, ask a TA. |
+| The installer does not end with `Done`, or Codex does not behave as the TAO agent | The installer needs network access to GitHub. Rerun it; if it still fails, ask a TA. |
 | Agent asks for `NGC_KEY`, `HF_TOKEN`, or which `model_type` the checkpoint is | Expected — see the answer table under Step 4: no credentials, checkpoint is `qwen3_vl`. |
 | Agent stops on the 256 GB GPU-memory or 384 GiB disk gate | Expected. Tell it the job is validated on this machine class and to proceed; see "Three Things Worth Knowing Before You Prompt". |
 | Agent refuses to run the container as root | Tell it the lab itself runs as root, so there is no ownership mismatch to protect against. |
 | `ERROR: This container was built for NVIDIA Driver Release 595.45 or later` | A version notice printed at container start, not a failure. Judge the run by its exit code and outputs. |
+| Job recorded as `ERROR` before model loading: "requires `TAO_API_JOB_ID`" or "could not write outputs as UID 1000" | Two mandatory settings from the Step 4 prompt were not applied: run as root, and set `TAO_API_JOB_ID` to the results directory. The agent usually proposes a corrected launch itself; approve it. |
 | Container exits 1 immediately, before loading anything | Its working directory is not writable. The agent should set it to the results mount (`-w /results`). |
 | A GPU has less than 60 GB free, or training OOMs | Something from Part 2.2 or 2.1 is still running. `docker ps` shows it; `docker stop` it. |
 | Training crashes saving a checkpoint with `'NoneType' object has no attribute 'state_dict'` | Zero training steps ran — batch size exceeded samples per GPU. See Step 5. |
@@ -449,7 +463,7 @@ platform skills; the prompts in this walkthrough work as written on any of them.
 :::{only} internal
 **Shot list.**
 
-- `codex plugin list` showing `tao-skill-bank`.
+- The installer's `Done. Launch 'codex' from any directory` line.
 - The agent's launch review before the training `docker run`.
 - Zero-shot score table: precision 1.000, recall 0.500, `stalled` 0/32.
 - Training log: three validation-loss lines and the safetensors export.
@@ -457,8 +471,8 @@ platform skills; the prompts in this walkthrough work as written on any of them.
 - Per-condition table: clean perfect, fog, rain and night slightly lower.
 - Merge summary: 17 GB, 4 shards, "scores identically to the adapter".
 
-**Time budget.** Free GPUs 2, install 2, zero-shot 4, plan review 4, train 7,
-evaluate 4, merge 4, clean up 1 = 28 min.
+**Time budget (measured).** Free GPUs 2, install 1, zero-shot 4, plan+review+train 8,
+evaluate 3, merge 4, clean up 1 = 23 min, leaving slack in a 30-minute slot.
 :::
 
 ## What's Next

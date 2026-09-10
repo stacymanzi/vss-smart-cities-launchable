@@ -276,6 +276,31 @@ the skill's 384 GiB gate is not decorative), the macro-F1 definition ambiguity
 this box was initially an **empty directory tree**; the notebook's check now requires
 `versions.yaml` and a real `SKILL.md`.
 
+### 11b. Codex walkthrough latency — profiled and optimized (10 Sep 2026)
+
+`tools/codex_profile.py <rollout.jsonl>` attributes each prompt's wall time to command
+execution vs model thinking, counts tool calls and reasoning blocks, and lists the
+slowest commands. Codex transcripts live in `~/.codex/sessions/YYYY/MM/DD/`.
+
+Profile of a learner's run on the prod instance (old prompts) vs the rewritten prompts
+run locally on 1x RTX PRO 6000 (containers are slower there than on 2x H100):
+
+| step | prod instance, old prompts | local, new prompts | what changed |
+|---|---|---|---|
+| zero-shot eval | 14.4 min (74 calls, 3 failed launches, 5 Q&A round-trips) | **3.3 min** (29 calls, 1 launch) | container recipe + validated spec in the prompt |
+| plan + launch | 4.8 + 14.7 min (75 calls, **83 reasoning blocks**) | **9.8 min** incl. 7 min container (33 calls, 9 blocks) | one merged prompt; `docker wait`, no log streaming |
+| eval adapter | 4.8 min | **3.1 min** (90 s container) | same |
+| merge + verify | skipped | **4.1 min** | same |
+
+Root causes, in order of size: (1) streaming the training log in 15-30 s slices and
+reasoning about each chunk (~10 min on a 5 min run); (2) discovery and retries for facts
+the agent could not know (uid, `TAO_API_JOB_ID`, daemon-visible paths, hook as a
+positional arg, template placeholders `min_pixels=1`, `dtype=""`); (3) confirmations the
+agent invented on top of Codex's own approval prompt. A spec built from the skill template
+also defaulted to CPU video decoding (`torchvision`): 20 min training instead of 6.5.
+Pointing the prompts at the shipped `configs/*.toml` fixes both the placeholders and
+the decoder.
+
 ## 12. Open items
 
 1. **Make the Drive links public**, or keep pre-staging the dataset. `§2.6` only verifies; it
