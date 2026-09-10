@@ -3,7 +3,7 @@
 In Part 2.1 the tuned profile turned the stock deployment into a working
 traffic system, with the stock Cosmos Reason 3 Nano confirming most, but not
 all, of the real events. Here you keep everything else fixed and swap in the
-checkpoint fine-tuned on the traffic dataset from Lab 3 and Part 2.3, then
+checkpoint fine-tuned on the traffic dataset in Part 2.3, then
 compare the two models on the same evaluation.
 
 Holding everything else constant is the whole point. The CV stages are
@@ -38,9 +38,10 @@ Measured agent time: about 5 minutes to rebuild, about 5 minutes for RT-VLM to
 load the checkpoint, about 6 minutes per 3-minute evaluation video.
 
 :::{note}
-This walkthrough deploys the course-provided checkpoint. Your own merged output
-from Part 2.3, at `/dli/task/data/lab3/part2/merged/Cosmos3-Nano-VLM-lora`, is
-the same recipe with the same basename and works as a drop-in replacement.
+`/dli/task/data/models/Cosmos3-Nano-VLM-lora` is either the checkpoint you merged
+in Part 2.3 Step 8 or, if one was already staged there, the course-provided one.
+Both are the same recipe with the same basename; everything below works
+unchanged.
 :::
 
 ## Step 1: Rebuild With the Fine-Tuned Checkpoint

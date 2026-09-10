@@ -1,0 +1,68 @@
+# Evaluation configuration for the TAO Cosmos-RL evaluator.
+# The notebook loads this file and overrides only the settings exposed in
+# section 3. Everything else is a working default.
+
+results_dir = "/results"
+num_gpus = 1
+
+[task]
+type = ""
+
+[dataset]
+annotation_path = "/val/annotations_augmented.json"
+media_dir = "/val"
+system_prompt = "SYSTEM_PROMPT"
+
+[model]
+model_name = "/ptm"
+base_model_path = "/ptm"
+enable_lora = false
+qwen3_vl_patch_embed = "linear"
+export_dir = "/results/merged"
+dtype = "bfloat16"
+max_length = 40960
+tp_size = 1
+
+[evaluation]
+answer_type = "freeform"
+num_processes = 1
+skip_saved = false
+seed = 0
+limit = -1
+shard_strategy = "stride"
+shard_id = 0
+batch_size = 1
+barrier_timeout_seconds = 14400
+
+[evaluation.soft_accuracy]
+enabled = true
+f1_threshold = 0.8
+
+[vision]
+num_frames = 8
+video_decoder = "pynvvideocodec"
+video_cache_size = 0
+frame_transfer = "host_rgb"
+process_threads = 8
+decoder_cache_size = 4
+decoder_threads = 1
+decoder_device = "cuda"
+dataloader_num_workers = 0
+dataloader_multiprocessing_context = "spawn"
+dataloader_persistent_workers = false
+
+[generation]
+max_retries = 10
+max_tokens = 32
+temperature = 0.0
+repetition_penalty = 1.0
+presence_penalty = 0.0
+frequency_penalty = 0.0
+
+[metrics]
+names = []
+
+[results]
+save_individual_results = true
+save_confusion_matrix = true
+save_metrics_summary = true

@@ -1,0 +1,119 @@
+# Training configuration for TAO Cosmos-RL LoRA SFT.
+# The notebook loads this file and overrides only the settings exposed in
+# section 3. Everything else is a working default.
+
+results_dir = "/results"
+redis = "12800"
+
+[train]
+compile = false
+epoch = 3
+train_batch_per_replica = 4
+optm_lr = 0.0001
+optm_impl = "foreach"
+epsilon = 1e-08
+optm_betas = [
+    0.9,
+    0.999,
+]
+optm_min_lr_factor = 0.0
+async_tp_enabled = false
+fsdp_reduce_dtype = "float32"
+fsdp_offload = false
+fsdp_reshard_after_forward = "default"
+sync_weight_interval = 1
+optm_name = "AdamW"
+optm_weight_decay = 0.01
+optm_warmup_epochs = 0
+optm_decay_type = "linear"
+optm_grad_norm_clip = 1.0
+master_dtype = "float32"
+param_dtype = "bfloat16"
+output_dir = "/results/output"
+resume = false
+
+[train.fp8]
+enable_fp8 = false
+
+[train.train_policy]
+type = "sft"
+mini_batch = 1
+dataloader_num_workers = 0
+conversation_column_name = "conversations"
+
+[train.train_policy.dataset]
+name = "wts"
+test_size = 0
+
+[train.ckpt]
+enable_checkpoint = true
+save_freq_in_epoch = 1
+export_safetensors = true
+save_ckpt_at_exit = true
+max_keep = 2
+
+[rollout.parallelism]
+n_init_replicas = 0
+
+[distillation.parallelism]
+n_init_replicas = 0
+
+[validation]
+enable = true
+freq_in_epoch = 1
+batch_size = 1
+dataloader_num_workers = 0
+enable_dataset_cache = false
+
+[validation.dataset]
+name = ""
+subset = ""
+split = "train"
+
+[policy]
+model_name_or_path = "/ptm"
+model_max_length = 40960
+model_gradient_checkpointing = true
+qwen3_vl_patch_embed = "linear"
+
+[policy.parallelism]
+dp_shard_size = 1
+dp_replicate_size = 1
+tp_size = 1
+cp_size = 1
+pp_size = 1
+n_init_replicas = 1
+
+[policy.lora]
+r = 16
+lora_alpha = 32
+lora_dropout = 0.0
+target_modules = [
+    "q_proj",
+    "v_proj",
+]
+init_lora_weights = true
+use_rslora = false
+modules_to_save = []
+
+[custom]
+system_prompt = "SYSTEM_PROMPT"
+
+[custom.train_dataset]
+annotation_path = "/train/annotations_augmented.json"
+media_path = "/train"
+media_root = "/train"
+
+[custom.val_dataset]
+annotation_path = "/val/annotations_augmented.json"
+media_path = "/val"
+media_root = "/val"
+
+[custom.vision]
+nframes = 8
+
+[logging]
+logger = [
+    "console",
+]
+project_name = "dli-vlm-pt"
