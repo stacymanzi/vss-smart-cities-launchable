@@ -146,11 +146,35 @@ def clone_skill_bank(dest, url=SKILL_BANK_URL, ref=SKILL_BANK_REF, depth=1):
     if (dest / HELPER_SUBDIR).is_dir():
         return True
     dest.parent.mkdir(parents=True, exist_ok=True)
-    rc = sh(["git", "clone", "--depth", str(depth), "--branch", ref,
-             url, str(dest)]).returncode
+    rc = sh(["git", "-c", "advice.detachedHead=false", "clone", "--quiet",
+             "--depth", str(depth), "--branch", ref, url, str(dest)]).returncode
     if rc != 0:
         print("  clone failed; set DLI_SKILL_BANK to an existing checkout")
     return (dest / HELPER_SUBDIR).is_dir()
+
+
+def skill_bank_complete(path):
+    """A real 7.2.0 checkout: manifest present and the model skills directory populated.
+    A partial S3 copy passes an is_dir() test, so look for the files that matter."""
+    p = Path(path)
+    return (p / "versions.yaml").is_file() and any(p.glob("skills/models/*/SKILL.md"))
+
+
+def ensure_skill_bank(path, ref=SKILL_BANK_REF):
+    """Return a complete Skill Bank checkout, cloning the pinned tag if the staged copy
+    is missing or partial. The partial copy is left untouched; the clone goes next to it."""
+    path = Path(path)
+    if skill_bank_complete(path):
+        return path
+    alt = path.with_name(f"{path.name}-{ref}")
+    if skill_bank_complete(alt):
+        return alt
+    print(f"  staged Skill Bank at {path} is missing or incomplete; cloning tag {ref} -> {alt}")
+    if alt.exists():
+        shutil.rmtree(alt)
+    if clone_skill_bank(alt, ref=ref) and skill_bank_complete(alt):
+        return alt
+    return path
 
 
 def helper_dir(skill_bank):

@@ -409,11 +409,11 @@ CACHE_DIR  = Path(os.environ.get("DLI_CACHE",      BASE / "cache"))
 SKILL_BANK = Path(os.environ.get("DLI_SKILL_BANK", BASE / "tao-skill-bank"))
 
 # The TAO Skill Bank is the packaged reference for the Cosmos-Reason workflows and
-# is used again in Part 2 of the day. It is staged with the course data (the lab
-# has no network to clone from); training and evaluation here do not need it.
-# An empty directory tree passes an is_dir() test; require the bank's own manifest.
-H.check("TAO Skill Bank staged", (SKILL_BANK / "versions.yaml").is_file()
-        and any(SKILL_BANK.glob("skills/*/*/SKILL.md")), str(SKILL_BANK))
+# is used again in Part 2 of the day. A copy is staged with the course data; if it
+# is missing or incomplete, the pinned 7.2.0 tag is cloned next to it instead.
+# Training and evaluation in this notebook do not depend on it.
+SKILL_BANK = H.ensure_skill_bank(SKILL_BANK)
+H.check(f"TAO Skill Bank {H.SKILL_BANK_REF}", H.skill_bank_complete(SKILL_BANK), str(SKILL_BANK))
 
 if BUILD_PTM and not sorted(PTM.glob("*.safetensors")):
     H.ensure_ptm(PTM, CACHE_DIR, SKILL_BANK)

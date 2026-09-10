@@ -31,8 +31,8 @@ deploys.
 ## Before You Begin
 
 The lab environment is already loaded: the TAO container image, the base
-checkpoint, the dataset and the Skill Bank are all in place, and the prompts
-below assume that. On a fresh machine none of this is a blocker — given an NGC
+checkpoint and the dataset are in place, and the prompts below assume that. The
+Skill Bank itself is installed in Step 2, straight from GitHub. On a fresh machine none of this is a blocker — given an NGC
 key and a Hugging Face token, the coding agent with the TAO skills pulls the
 image, downloads the model and prepares the checkpoint itself. The only
 difference is time.
