@@ -39,7 +39,7 @@ load the checkpoint, about 6 minutes per 3-minute evaluation video.
 
 :::{note}
 `/dli/task/data/models/Cosmos3-Nano-VLM-lora` is either the checkpoint you merged
-in Part 2.3 Step 8 or, if one was already staged there, the course-provided one.
+in Part 2.3 Step 7 or, if one was already staged there, the course-provided one.
 Both are the same recipe with the same basename; everything below works
 unchanged.
 :::

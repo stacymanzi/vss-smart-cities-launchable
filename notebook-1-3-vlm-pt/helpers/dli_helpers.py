@@ -146,11 +146,65 @@ def clone_skill_bank(dest, url=SKILL_BANK_URL, ref=SKILL_BANK_REF, depth=1):
     if (dest / HELPER_SUBDIR).is_dir():
         return True
     dest.parent.mkdir(parents=True, exist_ok=True)
-    rc = sh(["git", "clone", "--depth", str(depth), "--branch", ref,
-             url, str(dest)]).returncode
+    rc = sh(["git", "-c", "advice.detachedHead=false", "clone", "--quiet",
+             "--depth", str(depth), "--branch", ref, url, str(dest)]).returncode
     if rc != 0:
         print("  clone failed; set DLI_SKILL_BANK to an existing checkout")
     return (dest / HELPER_SUBDIR).is_dir()
+
+
+def skill_bank_complete(path):
+    """A real 7.2.0 checkout: manifest present and the model skills directory populated.
+    A partial S3 copy passes an is_dir() test, so look for the files that matter."""
+    p = Path(path)
+    return (p / "versions.yaml").is_file() and any(p.glob("skills/models/*/SKILL.md"))
+
+
+def ensure_skill_bank(path, ref=SKILL_BANK_REF):
+    """Return a complete Skill Bank checkout, cloning the pinned tag if the staged copy
+    is missing or partial. The partial copy is left untouched; the clone goes next to it."""
+    path = Path(path)
+    if skill_bank_complete(path):
+        return path
+    alt = path.with_name(f"{path.name}-{ref}")
+    if skill_bank_complete(alt):
+        return alt
+    print(f"  staged Skill Bank at {path} is missing or incomplete; cloning tag {ref} -> {alt}")
+    if alt.exists():
+        shutil.rmtree(alt)
+    if clone_skill_bank(alt, ref=ref) and skill_bank_complete(alt):
+        return alt
+    return path
+
+
+def verify_checkpoint(ptm):
+    """Check that a converted checkpoint is complete and readable, and print its shape.
+
+    The loader copies files one by one, so "some shards exist" is not "the checkpoint
+    is here": every shard named by the index must be present. Raises with guidance
+    when it is not, because nothing later in the lab can run without it."""
+    ptm = Path(ptm)
+    shards = sorted(ptm.glob("*.safetensors"))
+    index = ptm / "model.safetensors.index.json"
+    expected = sorted(set(json.loads(index.read_text())["weight_map"].values())) if index.exists() else []
+    missing = [x for x in expected if x not in {q.name for q in shards}]
+    complete = bool(shards) and not missing and (ptm / "config.json").exists()
+    detail = f"{len(shards)} shards" + (f", {len(missing)} still missing" if missing else "")
+    if not check(f"base checkpoint at {ptm}", complete, detail):
+        raise RuntimeError(
+            f"No complete base checkpoint under {ptm}. The course loader stages it before the lab "
+            "starts - wait for it to finish or ask a TA. (Elsewhere: set BUILD_PTM = True with HF_TOKEN exported.)")
+    cfg = json.loads((ptm / "config.json").read_text())
+    text = cfg.get("text_config", cfg)
+    print(f"       model_type={cfg['model_type']}  arch={cfg['architectures'][0]}  "
+          f"hidden={text.get('hidden_size')}  layers={text.get('num_hidden_layers')}")
+    # The container runs as this user; an unreadable shard surfaces much later as a
+    # confusing "No such file or directory", so check readability now.
+    try:
+        shards[0].open("rb").read(8)
+        check("checkpoint readable by this user", True)
+    except PermissionError:
+        check("checkpoint readable by this user", False, "run: chmod -R u+r <ptm>")
 
 
 def helper_dir(skill_bank):
