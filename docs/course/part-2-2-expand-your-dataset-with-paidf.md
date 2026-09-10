@@ -46,7 +46,8 @@ read both.
 
 ## Track A — Event Video Generation
 ### The EVG seed frame
-![Traffic-camera seed image used for EVG](traffic_cam.png)
+<img src="./assets/traffic_cam.png" alt="Traffic-camera seed image used for EVG" width="632">
+
 EVG begins with a **seed image**: a still image that establishes the scene,
 camera viewpoint, objects, and visual context from which the model generates
 motion and an event over time. A seed image can come from an existing image
@@ -119,7 +120,7 @@ images, caches, and outputs.
 ---
 ## Track B — Video Data Augmentation
 ### The VDA input video and augmentation settings
-<video controls width="832" src="input.mp4"></video>
+<video controls width="632" src="./assets/input.mp4"></video>
 
 VDA begins with an **input video** whose scene layout, subjects, and motion
 provide the structure for a new version of the clip. The pipeline uses that
