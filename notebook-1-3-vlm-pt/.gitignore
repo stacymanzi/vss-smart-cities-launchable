@@ -1,2 +1,5 @@
-# builder kept out of the lab repo (generates lab_3.ipynb)
-build_notebook.py
+# executed copies embed base64 video (~1.6 MB each)
+*.executed.ipynb
+__pycache__/
+# secrets: .env.example is tracked, .env is not
+.env

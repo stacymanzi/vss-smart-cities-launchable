@@ -1,5 +1,5 @@
 # Lab 3 runs training/eval inside the TAO container; the notebook kernel only
-# needs enough to build the dataset, drive docker, and plot the comparison.
+# needs enough to drive docker, read the annotations, and plot the comparison.
 tomli-w
 matplotlib
 pillow

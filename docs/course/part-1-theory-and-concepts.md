@@ -55,11 +55,15 @@ You'll cover the task types worth fine-tuning on, compare fine-tuning methods
 types, and metric selection. You finish by fine-tuning Cosmos Nano itself.
 
 :::{important}
-Notebook 1.3 is referred to as **Lab 3** in the Part 2.3 walkthrough, and its
-`configs/` and `helpers/` directories are reused there. Part 2.3 runs the same
-LoRA recipe you run here — same rank, same target modules, same
-hyperparameters — but through Agent Skills instead of notebook cells. Finishing
-1.3 is what makes Part 2.3 a comparison rather than a first encounter.
+Part 2.3 runs the same LoRA recipe you run here — same rank, same target
+modules, same hyperparameters — but through Agent Skills instead of notebook
+cells. Finishing 1.3 is what makes Part 2.3 a comparison rather than a first
+encounter.
+
+Part 2.3 does **not** depend on it, though. That walkthrough is self-contained
+and ships its own configuration; nothing in Part 2 reads this notebook's output
+or requires it to have been run. If you fall behind or restart your instance,
+you can start any Part 2 walkthrough directly.
 :::
 
 :::{only} internal
