@@ -77,7 +77,7 @@ Course Introduction <course/course-introduction>
 Part 1: Cosmos Basics <course/part-1-cosmos-basics>
 Part 2.1: Deploy Zero-Shot VSS for Alert Verification <course/part-2-1-deploy-zero-shot-vss>
 Part 2.2: Expanding Your Dataset With PAIDF <course/part-2-2-expand-your-dataset-with-paidf>
-Part 2.3: Fine-Tune for Alert Verification With TAO <course/part-2-3-fine-tune-for-alert-verification-with-tao>
+Part 2.3 (Optional): Fine-Tune for Alert Verification With TAO <course/part-2-3-fine-tune-for-alert-verification-with-tao>
 Part 2.4: Deploy Fine-Tuned VSS for Alert Verification <course/part-2-4-deploy-fine-tuned-vss>
 Conclusion <course/conclusion>
 ```

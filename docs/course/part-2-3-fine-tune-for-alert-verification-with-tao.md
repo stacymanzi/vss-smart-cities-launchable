@@ -1,4 +1,17 @@
-# Part 2.3: Fine-Tune for Alert Verification With TAO
+# Part 2.3 (Optional): Fine-Tune for Alert Verification With TAO
+
+:::{note}
+**This walkthrough is optional.** It repeats the workflow of Notebook 1.3 —
+zero-shot evaluation, LoRA fine-tuning, evaluation and merge — but driven by
+natural-language prompts to a coding agent rather than notebook cells. Part 2.4
+uses a course-provided fine-tuned checkpoint, so you can skip this section and
+return to it later.
+
+The same agent-driven workflow is demonstrated in the video tutorial
+[Post-train Cosmos 3 with TAO agent skills](https://youtu.be/9AQkVbx3fKA),
+which also covers **AutoML**: letting the agent search the hyperparameter space
+for you instead of tuning learning rate, rank and batch size by hand.
+:::
 
 Part 2.1 left you with a working pipeline whose verifier — the stock Cosmos
 Reason 3 Nano — confirms most real events but not all of them. Part 2.2 gave you
@@ -14,6 +27,7 @@ deploys.
 ```{nvlearning-meta}
 - **Level:** All levels — no prior VLM or Cosmos experience needed
 - **Duration:** About 30 minutes, dominated by one training wait
+- **Video tutorial:** <https://youtu.be/9AQkVbx3fKA>
 - **Agent:** Codex with the TAO Skill Bank
 - **Working directory:** `/dli/task/data/lab3/part2`
 ```
