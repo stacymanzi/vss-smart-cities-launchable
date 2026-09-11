@@ -120,7 +120,7 @@ images, caches, and outputs.
 ---
 ## Track B — Video Data Augmentation
 ### The VDA input video and augmentation settings
-<video controls width="632" src="./assets/input.mp4"></video>
+![Sample VDA input clip: an elevated camera over a multi-lane intersection](assets/input.mp4)
 
 VDA begins with an **input video** whose scene layout, subjects, and motion
 provide the structure for a new version of the clip. The pipeline uses that

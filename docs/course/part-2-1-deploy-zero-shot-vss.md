@@ -258,5 +258,5 @@ type `collision` or `Stop Anomaly Module`, and verdict `Confirmed` or
 You have a working traffic pipeline and a baseline. The stock Cosmos Reason 3
 Nano confirms most real events, but not all of them. Before you fine-tune it,
 you need data that targets the gap — which is what
-[Part 2.2: Augment the Dataset With PAIDF](part-2-2-augment-the-dataset-with-paidf)
+[Part 2.2: Expanding Your Dataset With PAIDF](part-2-2-expand-your-dataset-with-paidf)
 generates.
