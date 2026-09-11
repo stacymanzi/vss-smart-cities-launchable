@@ -1,4 +1,4 @@
-# Part 2.2: Expanding your Dataset With PAIDF
+# Part 2.2: Expanding Your Dataset With PAIDF
 Part 2.1 left you with a working pipeline and a gap: the verifier misses events
 it hasn't seen enough of. Collisions and stalled vehicles are, fortunately,
 rare — which is exactly what makes them hard to collect training data for.
@@ -32,7 +32,7 @@ Do them in either order. Each track follows the same shape:
 4. Review the result and its validation checks
 5. Release persistent endpoint containers when they are no longer needed
 ---
-## Load the skills
+## Load the Skills
 
 Open the Part-2 Directory `cd /dli/task/Part-2/` as its working directory. Its
 `skills/` subdirectory already contains both skills this lab uses. 
@@ -45,7 +45,7 @@ read both.
 ---
 
 ## Track A — Event Video Generation
-### The EVG seed frame
+### The EVG Seed Frame
 <img src="./assets/traffic_cam.png" alt="Traffic-camera seed image used for EVG" width="632">
 
 EVG begins with a **seed image**: a still image that establishes the scene,
@@ -54,7 +54,7 @@ motion and an event over time. A seed image can come from an existing image
 or video frame, or EVG can generate a new seed image when one is not
 available.
 
-### Deploy the model endpoints
+### Deploy the Model Endpoints
 ```
 Run preflight for physical-ai-event-video-generation-local, then deploy
 the model endpoints it needs.
@@ -64,7 +64,7 @@ export lines if you ask for `--hosted`. **GPU reality check:** local deploy
 needs 2× H100-class GPUs minimum (1 for Cosmos3-Nano, 1 for Nemotron) you 
 can set up the workflow with hosted endpoints if needed.
 
-### Generate a traffic-anomaly video
+### Generate a Traffic-Anomaly Video
 ```
 Generate one clip of a stalled vehicle on an urban road using
 `/dli/task/Part-2/traffic_cam.png` as the seed image, seed 43.
@@ -84,7 +84,7 @@ paidf_outputs/evg/<run-name>/
 ├── traffic_cam_vehicle_stopped_000_metadata.json
 └── traffic_cam_vehicle_stopped_000_evaluation.json
 ```
-### Review the result
+### Review the Result
 ```
 Evaluate the result — show me the prompt that was sent to Cosmos I2V and
 the verification pass/fail table.
@@ -96,7 +96,7 @@ on whether the requested anomaly, environment, and visual clarity actually
 show up. A failed check means regenerate with a different seed, not ship
 as-is.
 
-### Release the EVG resources
+### Release the EVG Resources
 
 Generation and annotation workers remove themselves when they finish, but
 the Nemotron and Cosmos endpoint containers stay up and continue reserving
@@ -119,8 +119,8 @@ images, caches, and outputs.
 
 ---
 ## Track B — Video Data Augmentation
-### The VDA input video and augmentation settings
-<video controls width="632" src="./assets/input.mp4"></video>
+### The VDA Input Video and Augmentation Settings
+![Sample VDA input clip: an elevated camera over a multi-lane intersection](assets/input.mp4)
 
 VDA begins with an **input video** whose scene layout, subjects, and motion
 provide the structure for a new version of the clip. The pipeline uses that
@@ -153,7 +153,7 @@ overpass shadows can confuse lighting assessment, and ambiguous signal
 states can produce noisy red-light-violation labels. If you use your own
 traffic footage, provide its local path instead of the demo clip.
 
-### Deploy the model endpoint
+### Deploy the Model Endpoint
 ```
 Run preflight for physical-ai-video-data-augmentation-local, then deploy
 the model endpoint it needs.
@@ -162,7 +162,7 @@ Deploys Nemotron 3 Nano Omni as a single shared VLM+LLM endpoint (needs 1 free G
 reuses the instance Track A already started if you ran that first.
 Cosmos Transfer is not a separate endpoint in this flow; the skill loads it
 inside the augmentation container when you submit the generation request.
-### Augment the clip with different conditions
+### Augment the Clip With Different Conditions
 
 ```
 Run only the augmentation stage on `/dli/task/Part-2/input.mp4` using the
@@ -180,7 +180,7 @@ Once the endpoint is ready, expect roughly 16 minutes for augmentation and
 3 minutes for auto-labeling on this 7-second clip. Around 18–20 minutes
 total.
 
-### View the result
+### View the Result
 
 Successful runs are published under
 `/dli/task/Part-2/paidf_outputs/vda/<run-name>/<video-name>_aug0/`. View the
@@ -202,7 +202,7 @@ Create a self-contained HTML viewer for the published original, augmented,
 and labeled videos, using embedded browser-compatible MP4s so they remain visible.
 ```
 
-### Release the VDA resources
+### Release the VDA Resources
 
 Augmentation and auto-labeling workers clean themselves up, but the Nemotron
 endpoint remains running after the flow and continues to reserve its GPU.
@@ -214,7 +214,7 @@ published outputs.
 ```
 
 ---
-## Scaling up generations
+## Scaling Up Generations
 This walkthrough runs PAIDF on one machine with local Docker containers,
 which is a good fit for small numbers of videos. To generate
 larger datasets, **Kubernetes (K8s)** can coordinate containers across a GPU
