@@ -436,16 +436,8 @@ dataset/
   dataset_info.json                    task metadata + counts
 ```
 
-On a DLI instance this is staged with the image. If you are building it from the raw clip
-archives yourself, `prepare_dataset.py` (shipped alongside this notebook) assembles exactly
-this layout from folder-per-class video directories — run it once, offline:
-
-```bash
-python3 prepare_dataset.py --clips <traffic_anomaly_dataset> \
-    --aug-train <augmented_train> --aug-val <augmented_eval> --out <dataset>
-```
-
-The cell below only **verifies** what is there; it downloads nothing.
+On a DLI instance this is staged with the course data. The cell below only **verifies**
+what is there; it downloads nothing.
 """)
 
 code(r"""
