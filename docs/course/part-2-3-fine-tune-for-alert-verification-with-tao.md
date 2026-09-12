@@ -12,7 +12,7 @@ same clips, and merge the adapter into the plain checkpoint that Part 2.4
 deploys.
 
 ```{nvlearning-meta}
-- **Level:** Intermediate
+- **Level:** All levels — no prior VLM or Cosmos experience needed
 - **Duration:** About 30 minutes, dominated by one training wait
 - **Agent:** Codex with the TAO Skill Bank
 - **Working directory:** `/dli/task/data/lab3/part2`

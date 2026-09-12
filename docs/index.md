@@ -1,24 +1,27 @@
 # Build High-Accuracy Vision AI Agents for Anomaly Detection
 
-Build an end-to-end vision AI agent for smart-city traffic anomaly detection
+Build a **Video Analytics AI Agent** for smart-city traffic anomaly detection
 with NVIDIA Cosmos, the NVIDIA Blueprint for Video Search and Summarization
-(VSS), and Metropolis Skills.
+(VSS), NVIDIA Physical AI Data Factory (PAIDF), and NVIDIA TAO Toolkit.
 
-You start from a stock deployment, measure exactly where it fails, generate the
-data it's missing, fine-tune the model that verifies its alerts, and redeploy
-the improved system.
+You start at the model level with Cosmos, then move to the production
+blueprints — driven by coding agents and Agent Skills. Along the way you take a
+stock deployment, measure exactly where it fails, generate the data it's
+missing, fine-tune the model that verifies its alerts, and redeploy the
+improved system.
 
 ```{nvlearning-meta}
-- **Level:** Intermediate
+- **Level:** All levels — no prior VLM or Cosmos experience needed
 - **Audience:** Developers building vision AI agents and video analytics applications
 - **Structure:** Part 1 (three notebooks) and Part 2 (four agent-driven walkthroughs)
 ```
 
 ## Start Here
 
-Begin at the [Course Introduction](course/course-introduction.md) for the
-architecture, the workflow, and how the two evaluations differ. Then work
-through Part 1 and the four Part 2 walkthroughs in order.
+Begin at the [Course Introduction](course/course-introduction.md) for what
+you'll build, why the course is split in two, and the improvement loop that
+structures it. Then work through Part 1 and the four Part 2 walkthroughs in
+order.
 
 ::::{grid} 1 2 2 2
 :gutter: 3
@@ -27,24 +30,24 @@ through Part 1 and the four Part 2 walkthroughs in order.
 :link: course/course-introduction
 :link-type: doc
 
-What you'll build, the three-stage alert verification pipeline, and the
-improvement loop that structures the whole course.
+The Video Analytics AI Agent you'll build, the VSS components it uses, and
+why the course moves from model level to blueprint level.
 :::
 
-:::{grid-item-card} Part 1: Theory and Concepts
-:link: course/part-1-theory-and-concepts
+:::{grid-item-card} Part 1: Cosmos Basics
+:link: course/part-1-cosmos-basics
 :link-type: doc
 
-Three notebooks: vision language models, generative augmentation, and VLM
-fine-tuning.
+Cosmos at the model level. Three notebooks covering the Reasoner and
+Generator towers, generative augmentation, and VLM fine-tuning.
 :::
 
 :::{grid-item-card} Part 2: Application
 :link: course/part-2-1-deploy-zero-shot-vss
 :link-type: doc
 
-Four walkthroughs driven by coding agents and Agent Skills — deploy, augment,
-fine-tune, redeploy.
+The blueprints at production scale. Four walkthroughs driven by coding agents
+and Agent Skills — deploy, expand, fine-tune, redeploy.
 :::
 
 :::{grid-item-card} Conclusion
@@ -66,44 +69,12 @@ Part 1 runs from the notebook folders in this repository:
 | 1.2 Augmenting and Generating Datasets | `notebook-1-2-sdg/sdg_part1_notebook.ipynb` |
 | 1.3 Fine-Tuning Vision Language Models | `notebook-1-3-vlm-pt/lab_3.ipynb` |
 
-## Build This Site
-
-```bash
-uv sync
-uv run sphinx-build -b html docs docs/_build/html
-uv run python -m http.server 8000 -d docs/_build/html/
-```
-
-Then open `http://localhost:8000`.
-
-One-command alternative that builds, serves, and opens a browser (press
-`Ctrl+C` to stop):
-
-```bash
-uv run python scripts/preview_learning_site.py
-```
-
-## Build the Internal Edition
-
-Facilitator material — shot lists, instructor cues, and the Part 2.3 time
-budget — is gated to the internal audience and does not appear in the default
-build. To produce it:
-
-```bash
-uv run sphinx-build -b html -D nvlearning_audience=internal docs docs/_build/internal
-```
-
-- `nvlearning_mode`: `course`, `lab`, or `hub`
-- `nvlearning_audience`: `public` or `internal`
-
-Add `-W --keep-going` to fail the build on warnings.
-
 ```{toctree}
 :maxdepth: 2
 :hidden:
 
 Course Introduction <course/course-introduction>
-Part 1: Theory and Concepts <course/part-1-theory-and-concepts>
+Part 1: Cosmos Basics <course/part-1-cosmos-basics>
 Part 2.1: Deploy Zero-Shot VSS for Alert Verification <course/part-2-1-deploy-zero-shot-vss>
 Part 2.2: Expanding Your Dataset With PAIDF <course/part-2-2-expand-your-dataset-with-paidf>
 Part 2.3: Fine-Tune for Alert Verification With TAO <course/part-2-3-fine-tune-for-alert-verification-with-tao>

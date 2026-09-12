@@ -7,7 +7,7 @@ The NVIDIA Physical AI Data Factory closes that gap two ways. You can
 can *augment* existing footage with new weather and lighting conditions.
 This walkthrough does one of each.
 ```{nvlearning-meta}
-- **Level:** Intermediate
+- **Level:** All levels — no prior VLM or Cosmos experience needed
 - **Tracks:** Two independent tracks, completable in either order
 - **Generation time:** About 4 minutes per EVG clip; about 18–20 minutes for the 7-second VDA augmentation plus auto-labeling, once endpoints are ready
 - **Working directory:** `/dli/task/Part-2/`
