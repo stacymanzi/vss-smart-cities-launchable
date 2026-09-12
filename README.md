@@ -18,7 +18,7 @@ Summarization (VSS), NVIDIA Physical AI Data Factory, and NVIDIA TAO Toolkit.
 
 ## Course Structure
 
-**Part 1 — Theory and Concepts** runs from the three notebook folders above.
+**Part 1 — Cosmos Basics** runs from the three notebook folders above.
 
 **Part 2 — Application** is four agent-driven walkthroughs, documented in
 `docs/course/`:

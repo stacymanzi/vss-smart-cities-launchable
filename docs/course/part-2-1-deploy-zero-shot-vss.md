@@ -10,7 +10,7 @@ discover why a stock deployment is only the starting point for a traffic
 camera, then apply the traffic-tuned profile and watch real alerts arrive.
 
 ```{nvlearning-meta}
-- **Level:** Intermediate
+- **Level:** All levels — no prior VLM or Cosmos experience needed
 - **Duration:** About 45 minutes, dominated by two deployment waits
 - **Agent:** Codex with the VSS skills
 - **Working directory:** `/opt/vss`
@@ -89,8 +89,8 @@ several things differ from a workstation:
    down and never run `docker system prune`.
 
 6. An idle or empty component is usually correct, not broken. RT-CV is a
-   DeepStream worker, not an HTTP server, and processes zero sources until
-   a stream is registered in VST. The Alert UI stays empty until an alert
+   stream-processing worker, not an HTTP server, and processes zero sources
+   until a stream is registered in VST. The Alert UI stays empty until an alert
    rule exists. Check `/vst/api/v1/sensor/list` and the alert-bridge rule
    list before concluding something is misconfigured.
 

@@ -11,7 +11,7 @@ untouched, so Behavior Analytics produces identical candidates. Any difference
 you measure comes from the verifier and nothing else.
 
 ```{nvlearning-meta}
-- **Level:** Intermediate
+- **Level:** All levels — no prior VLM or Cosmos experience needed
 - **Duration:** About 20 minutes of agent time
 - **Agent:** Codex, continuing from the Part 2.1 terminal
 - **Checkpoint:** `/dli/task/data/models/Cosmos3-Nano-VLM-lora`

@@ -19,7 +19,7 @@ nvlearning_metadata = {
     "slug": "singapore-ai-day-dli",
     "survey_source": "singapore-ai-day-dli",
     "duration": "Two parts",
-    "level": "Intermediate",
+    "level": "All levels",
     "delivery": "self-paced",
 }
 
