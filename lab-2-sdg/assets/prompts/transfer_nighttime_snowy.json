@@ -59,7 +59,7 @@
     "temporal_consistency": "Maintain stable snowfall density, light placement, and vehicle appearance across every frame. Snow must not flicker or move independently of the falling motion."
   },
   "style_medium": "Live-action video",
-  "artistic_style": "Photorealistic nighttime traffic-surveillance footage under active snowfall",
+  "artistic_style": "Photorealistic nighttime traffic-camera footage under active snowfall",
   "context": "Nighttime snowy augmentation of an existing intersection traffic video using Cosmos 3 Transfer with Edge control",
   "negative_prompt": "daytime, bright sunlight, clear sky, no snow, dry pavement, corrected vehicle trajectory, changed lane position, changed traffic direction, changed speed, collision, added vehicle, removed vehicle, duplicated vehicle, recolored vehicle, added pedestrian, added building, camera motion, camera shake, pan, tilt, zoom, geometry drift, flicker",
   "audio_description": "Preserve the original video audio without alteration. Do not add wind, snowfall sounds, sirens, horns, or new traffic audio."

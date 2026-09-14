@@ -25,7 +25,7 @@
       "number_of_subjects": "Multiple vehicles, 3-6"
     }
   ],
-  "background_setting": "A four-way signalized intersection viewed from a fixed elevated surveillance camera. Lane markings, directional arrows, stop lines, pedestrian crossings, and traffic signal heads are clearly visible throughout. Traffic signals alternate in strict phase separation: when one approach direction has a green signal, all perpendicular approaches display red and no vehicle from those directions enters the intersection box. Vehicles from different directions never occupy the intersection box at the same time. All scene geometry, camera angle, and background elements are preserved exactly. Use the provided image as the exact first frame.",
+  "background_setting": "A four-way signalized intersection viewed from a fixed elevated traffic camera. Lane markings, directional arrows, stop lines, pedestrian crossings, and traffic signal heads are clearly visible throughout. Traffic signals alternate in strict phase separation: when one approach direction has a green signal, all perpendicular approaches display red and no vehicle from those directions enters the intersection box. Vehicles from different directions never occupy the intersection box at the same time. All scene geometry, camera angle, and background elements are preserved exactly. Use the provided image as the exact first frame.",
   "lighting": {
     "conditions": "Consistent daylight as established in the provided image",
     "direction": "Overhead natural light, stable throughout the clip",
@@ -42,13 +42,13 @@
   "cinematography": {
     "camera_motion": "Fixed — the camera does not pan, tilt, or zoom",
     "framing": "Wide overhead establishing shot of the full intersection",
-    "camera_angle": "Elevated, near-top-down surveillance angle",
+    "camera_angle": "Elevated, near-top-down traffic-camera angle",
     "depth_of_field": "Deep — all lanes and vehicles remain in focus",
     "focus": "Uniformly sharp across the intersection",
     "camera_preservation": "Use the provided image as the exact first frame and preserve its perspective and framing throughout"
   },
   "style_medium": "Live-action video",
-  "artistic_style": "Photorealistic daytime traffic-surveillance footage",
+  "artistic_style": "Photorealistic daytime traffic-camera footage",
   "context": "Normal, rule-abiding traffic flow through a signalized intersection with correctly phase-separated approaches",
   "negative_prompt": "collision, running a red light, wrong-way driving, vehicles overlapping in the intersection box simultaneously, teleporting vehicles, flickering, camera motion, pan, tilt, zoom, added pedestrians, added signage, nighttime, changed lane markings"
 }

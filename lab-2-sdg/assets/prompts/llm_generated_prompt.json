@@ -1,0 +1,54 @@
+{
+  "subjects": [
+    {
+      "description": "Blue sedan partially visible on the left edge of the frame",
+      "appearance_details": "Blue sedan, only front left side visible, typical sedan shape, moderate size, color blue, no visible driver details",
+      "relationship": "Driver inside, moving through the intersection as the primary vehicle",
+      "location": "Left side of the frame, near the curb, just before the intersection",
+      "relative_size": "Small, occupies a minor portion of the left edge",
+      "orientation": "Facing forward (southbound) toward the intersection",
+      "pose": "Seated driver, wheels aligned straight, vehicle positioned at the stop line",
+      "action": "Moving straight ahead at a moderate speed, crossing the intersection from left to right, following the green traffic light for its direction",
+      "state_changes": "Progresses from the stop line into the intersection, traverses the crosswalk and exits the frame on the right side",
+      "number_of_subjects": 1
+    },
+    {
+      "description": "White sedan exiting the shopping center parking lot",
+      "appearance_details": "White sedan, fully visible, typical sedan shape, moderate size, color white, no visible damage",
+      "relationship": "Secondary vehicle interacting with traffic, turning onto the main road",
+      "location": "Near the shopping center entrance, just off the main road, positioned to turn right onto the intersection",
+      "relative_size": "Medium, occupies a moderate portion of the left-center background",
+      "orientation": "Facing right (eastbound) as it prepares to turn onto the main road",
+      "pose": "Driver inside, wheels turned right, vehicle angled as it enters the roadway",
+      "action": "Turning right from the parking lot onto the main road at a slow speed, aligning with the traffic lane and obeying the red light for cross traffic",
+      "state_changes": "Moves from stationary in the parking lot to entering the roadway, aligning with traffic flow and continuing forward",
+      "number_of_subjects": 1
+    }
+  ],
+  "background_setting": "Sunny suburban intersection with palm trees, a ULTA store, a Shopping Center sign, and multiple lanes of asphalt; traffic lights are visible at the intersection, and the road layout includes crosswalks and dashed lane markings. Use the provided image as the exact first frame. Preserve all scene geometry, camera angle, and background elements unchanged throughout.",
+  "lighting": {
+    "conditions": "Bright sunny daylight with clear visibility",
+    "direction": "Sunlight coming from upper left, casting shadows toward the right",
+    "shadows": "Sharp, defined shadows from palm trees and traffic lights extending to the right",
+    "illumination_effect": "Even, natural illumination highlighting the road surface and building facades",
+    "sky": "Clear blue sky visible above the buildings"
+  },
+  "aesthetics": {
+    "composition": "Wide-angle view centered on the intersection, with buildings framing the background and road leading into the distance",
+    "color_scheme": "Warm earth tones from the buildings, green foliage, gray asphalt, and blue sky",
+    "mood_atmosphere": "Calm, everyday traffic scene with a sense of routine",
+    "patterns": "Repeating dashed lane markings, palm tree silhouettes, and rectangular storefronts"
+  },
+  "cinematography": {
+    "camera_motion": "Camera is fixed/locked, no movement",
+    "framing": "Wide shot capturing the full intersection and surrounding buildings",
+    "camera_angle": "High-angle perspective from a stationary position overlooking the road",
+    "depth_of_field": "Deep depth of field with entire scene in focus",
+    "focus": "Sharp focus throughout the frame",
+    "camera_preservation": "Anchor to the provided image as the first frame and preserve its perspective and framing"
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic style matching the provided image",
+  "context": "Multiple vehicles navigate a suburban intersection, obeying traffic signals in a typical daytime traffic flow.",
+  "negative_prompt": "pedestrians, bicycles, weather effects, cartoon style, motion blur, additional buildings, signage changes, artificial lighting, low resolution"
+}

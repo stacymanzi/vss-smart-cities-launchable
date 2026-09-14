@@ -1,0 +1,8 @@
+# Lab 1 (Cosmos 3 Reasoner NIM) Python dependencies.
+# Consumed ONLY by the lab image build (pip install -r requirements.txt in the Dockerfile).
+# The notebook never installs anything at runtime.
+# VERIFY ON DEVBOX: pin exact versions from the validated lab image:
+#   python -m pip freeze | grep -iE '^(openai|requests|ipython)=='
+openai
+requests
+ipython
