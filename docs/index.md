@@ -65,9 +65,9 @@ Part 1 runs from the notebook folders in this repository:
 
 | Notebook | Folder |
 |---|---|
-| 1.1 Vision Language Models | `notebook-1-1-vlm/lab_1.ipynb` |
-| 1.2 Augmenting and Generating Datasets | `notebook-1-2-sdg/sdg_part1_notebook.ipynb` |
-| 1.3 Fine-Tuning Vision Language Models | `notebook-1-3-vlm-pt/lab_3.ipynb` |
+| 1.1 Vision Language Models | `lab-1-vlm/lab_1.ipynb` |
+| 1.2 Augmenting and Generating Datasets | `lab-2-sdg/lab_2.ipynb` |
+| 1.3 Fine-Tuning Vision Language Models | `lab-3-vlm-pt/lab_3.ipynb` |
 
 ```{toctree}
 :maxdepth: 2

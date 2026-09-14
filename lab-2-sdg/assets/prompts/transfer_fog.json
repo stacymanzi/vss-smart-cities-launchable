@@ -1,0 +1,85 @@
+{
+  "subjects": [
+    {
+      "description": "A person wearing a bright yellow safety vest and dark clothing standing on the left side of the flooded intersection",
+      "appearance_details": "Preserve the exact appearance, shape, color, size, and identity of the person as seen in the source video; no new details are invented",
+      "relationship": "The person is stationary near the water's edge, observing the flooded street with no interaction with other subjects",
+      "location": "On the left side of the frame, close to the water's edge within the flooded intersection area",
+      "relative_size": "Small relative to the frame, occupying a minor portion of the left side",
+      "orientation": "Facing slightly toward the center of the intersection",
+      "pose": "Standing upright with feet planted, body oriented toward the road",
+      "action": "Motion and trajectory are identical to the source video \u2014 the person remains stationary throughout",
+      "state_changes": "State remains unchanged; the person does not move or change position",
+      "number_of_subjects": 1
+    },
+    {
+      "description": "A dark-colored vehicle (car) traveling from left to right across the flooded intersection",
+      "appearance_details": "Preserve the exact appearance, shape, color, size, and identity of the vehicle as seen in the source video; no new details are invented",
+      "relationship": "The vehicle moves across the intersection following the road lane, with no interaction with other subjects",
+      "location": "Center-left of the frame, moving along the road lane",
+      "relative_size": "Medium relative to the frame",
+      "orientation": "Facing right, moving forward",
+      "pose": "Driving with wheels on the wet road",
+      "action": "Motion and trajectory are identical to the source video \u2014 the vehicle follows its original path at original speed",
+      "state_changes": "State remains unchanged; the vehicle continues its motion without alteration",
+      "number_of_subjects": 1
+    }
+  ],
+  "background_setting": "The same structural layout and scene geometry as the source video. All scene geometry, camera angle, and composition are preserved exactly. The environment is transformed into a dense foggy daytime condition with thick ground-level fog that reduces visibility to approximately 30-50 meters, diffuses all light sources into soft glowing halos, mutes colors to pale greys and whites, and creates an atmospheric hazy depth effect. Road surfaces appear damp from fog condensation.",
+  "environmental_transformation": {
+    "target_condition": "dense foggy daytime",
+    "transformation_scope": "Sky and ambient illumination become diffused and hazy; visibility is reduced; colors are muted to pale greys and whites; light sources produce soft glowing halos; road surfaces appear damp from fog condensation while retaining existing geometry",
+    "preservation_requirements": "Exact camera position, crop, perspective, field of view, scene geometry, subject identities, subject count, trajectories, speeds, relative spacing, and event timing must all be preserved from the source video.",
+    "prohibited_changes": [
+      "Do not alter subject trajectories or speeds",
+      "Do not add, remove, duplicate, or recolor subjects",
+      "Do not change camera framing, crop, or perspective",
+      "Do not introduce new objects or structures",
+      "Do not revert to source-video rainy conditions",
+      "Do not modify fog density beyond the specified 30-50 meter visibility",
+      "Do not change the time of day to night or any other weather condition",
+      "Do not alter subject colors or material properties beyond the fog-induced muting"
+    ]
+  },
+  "lighting": {
+    "conditions": "Overcast, diffused daylight filtered through dense fog",
+    "direction": "Light source direction is obscured; illumination is omnidirectional and soft",
+    "shadows": "Shadows are very faint or absent due to diffuse lighting",
+    "illumination_effect": "Scene visibility is reduced; exposure is lower with soft glowing halos around light sources",
+    "sky": "Sky is obscured by thick fog, appearing as a uniform pale grey/white haze",
+    "surface_conditions": "Road surfaces appear damp and slightly reflective from fog condensation, with a misty texture",
+    "artificial_lighting": "Any artificial lights (e.g., streetlights) appear as soft glowing halos, diffused by fog"
+  },
+  "aesthetics": {
+    "composition": "Maintains the original shot composition with the flooded intersection, palm trees, and buildings unchanged",
+    "color_scheme": "Pale greys, whites, and muted tones dominate, with reduced color saturation",
+    "mood_atmosphere": "Mysterious, quiet, and ethereal atmosphere due to dense fog",
+    "patterns": "Repeating reflections on wet surfaces become hazy and blurred"
+  },
+  "cinematography": {
+    "camera_motion": "Camera motion is identical to the source video",
+    "framing": "Shot framing matches the source video",
+    "camera_angle": "Camera angle unchanged",
+    "depth_of_field": "Depth of field unchanged",
+    "focus": "Focus characteristics unchanged",
+    "camera_preservation": "Preserve the exact source camera \u2014 do not pan, tilt, zoom, crop, reframe, rotate, or alter perspective"
+  },
+  "control_guidance": {
+    "control_type": "Edge",
+    "structure_priority": "Use the control signal as strict structural guidance, preserving all subject silhouettes, boundaries, and scene structure throughout",
+    "appearance_freedom": [
+      "lighting",
+      "weather",
+      "surface texture",
+      "color temperature",
+      "atmospheric effects"
+    ],
+    "motion_priority": "All subjects must follow their exact source-video trajectories; control guidance must never cause subjects to move differently than the source",
+    "temporal_consistency": "New appearance must remain stable and consistent frame-to-frame \u2014 no flickering, shimmering, or drifting"
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic style matching the target condition",
+  "context": "Transform the rainy street scene into a dense foggy daytime setting while preserving all subject identities, motion, and camera parameters using edge-based structural control.",
+  "negative_prompt": "rain, water puddles, bright sunlight, clear sky, high contrast, saturated colors, added vehicles, removed subjects, altered camera framing, changed perspective, introduced fog density beyond 50 meters, changed time of day to night, added snow, added dust, altered subject colors, changed vehicle speed, added reflections, added glare, added lens flare, added motion blur, added camera shake",
+  "audio_description": "Preserve the original video audio without alteration, unless describing new ambient sound consistent with dense fog (e.g., muffled ambient noise)."
+}

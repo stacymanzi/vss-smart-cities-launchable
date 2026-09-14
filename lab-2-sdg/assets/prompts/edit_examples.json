@@ -1,0 +1,27 @@
+[
+  {
+    "name": "snowy_morning",
+    "seed": 42,
+    "prompt": "Change the scene to a snowy morning. Add snow-covered road surfaces with soft reflections, overcast sky, and light snowfall. Keep all scene elements, objects, and their positions exactly as they are."
+  },
+  {
+    "name": "rainy_morning",
+    "seed": 42,
+    "prompt": "Change the scene to a rainy morning. Add wet road surfaces with reflections, overcast sky, and light rain. Keep all scene elements, objects, and their positions exactly as they are."
+  },
+  {
+    "name": "night_streetlights",
+    "seed": 7,
+    "prompt": "Change the scene to nighttime. Streetlights, traffic signals and vehicle headlights are the only light sources, with a dark sky. Keep every vehicle, lane marking, sign, and building exactly where it is."
+  },
+  {
+    "name": "dense_fog",
+    "seed": 1234,
+    "prompt": "Change the weather to dense morning fog with reduced visibility and muted colors. Keep all scene elements, objects, and their positions exactly as they are."
+  },
+  {
+    "name": "golden_hour",
+    "seed": 99,
+    "prompt": "Change the lighting to late-afternoon golden hour with long soft shadows and warm sunlight. Keep all scene elements, objects, and their positions exactly as they are."
+  }
+]

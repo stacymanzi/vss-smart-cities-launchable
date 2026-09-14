@@ -1,0 +1,66 @@
+{
+  "subjects": [
+    {
+      "description": "All vehicles present in the source video, traveling through the intersection",
+      "appearance_details": "Headlights and tail lights are active and visible. Preserve every vehicle's original body shape, color, size, and visual identity from the source video.",
+      "relationship": "Same relative positions, lane occupancy, and interactions between vehicles as the source video",
+      "location": "Identical to source video",
+      "relative_size": "Identical to source video",
+      "orientation": "Identical to source video",
+      "pose": "All vehicles remain upright with wheels naturally contacting the road surface",
+      "action": "Identical actions and trajectories as the source video — only the lighting and sky change, not behavior or motion",
+      "state_changes": "Identical to the source video — traffic timing and event progression unchanged",
+      "number_of_subjects": "Multiple vehicles, matching the source video count"
+    }
+  ],
+  "background_setting": "The same structural layout and scene geometry as the source video, re-rendered under very dark nighttime conditions. The overall scene is deeply dark — the vast majority of the frame is in shadow, with only tight pools of light directly beneath streetlights and traffic signals. Road surfaces are dry with no precipitation. The sky is a very dark, near-black void. All scene geometry, camera angle, and composition are preserved exactly.",
+  "environmental_transformation": {
+    "target_condition": "Very dark clear nighttime with sparse artificial street lighting",
+    "transformation_scope": "Replace all daytime or ambient lighting with very dark nighttime conditions. The scene must be predominantly dark — ambient fill is essentially zero. Only narrow, localized pools of artificial light from streetlights and signal heads break the darkness. Change only the sky, exposure, and ambient illumination. Road surfaces remain dry. No precipitation is added.",
+    "preservation_requirements": "Preserve the exact source-video camera position, crop, perspective, field of view, intersection geometry, vehicle identities, vehicle count, trajectories, speeds, relative spacing, and event timing.",
+    "prohibited_changes": [
+      "Do not move any vehicle into a different lane or alter its original trajectory",
+      "Do not add, remove, duplicate, replace, recolor, or resize any vehicle",
+      "Do not alter vehicle speeds, spacing, or traffic timing",
+      "Do not add rain, snow, fog, or any other precipitation",
+      "Do not alter the intersection geometry, curbs, signal poles, or surrounding structures",
+      "Do not add pedestrians, new roadside structures, or emergency vehicles",
+      "Do not retain daytime lighting or a bright sky"
+    ]
+  },
+  "lighting": {
+    "conditions": "Very dark clear nighttime — the scene is predominantly in deep shadow; artificial lighting is the sole illumination source with virtually no ambient fill",
+    "direction": "Narrow point sources from streetlights directly above and traffic signal heads; no diffuse ambient fill from sky or surroundings",
+    "shadows": "Deep, near-total darkness between light pools; areas beyond the reach of streetlights are very dark or essentially black",
+    "illumination_effect": "Extreme high-contrast scene: tight warm amber or cool white cones of light against a very dark or black background; lit zones are small islands in surrounding darkness",
+    "sky": "Very dark, near-black night sky; no meaningful moon glow or star brightness — the sky contributes no ambient fill to the scene",
+    "surface_conditions": "Dry road surface; lane markings and curbs faintly visible under streetlight pools, lost to darkness elsewhere",
+    "artificial_lighting": "Streetlights and traffic signal heads are active; their light falls in tight cones — areas outside these cones receive no meaningful illumination"
+  },
+  "aesthetics": {
+    "composition": "Same fixed overhead intersection framing as the source video",
+    "color_scheme": "Predominantly very dark or black tones; small warm amber cones from streetlights; dark dry asphalt fading to black away from light sources",
+    "mood_atmosphere": "Very dark, moody nighttime traffic scene — oppressively dark with only sparse artificial light breaking the blackness",
+    "patterns": "Tight isolated light pools against deep surrounding darkness; sharp transition from lit to unlit areas"
+  },
+  "cinematography": {
+    "camera_motion": "Identical to source video — locked off",
+    "framing": "Identical to source video — wide overhead intersection view",
+    "camera_angle": "Identical to source video — elevated fixed camera angle",
+    "depth_of_field": "Identical to source video",
+    "focus": "Identical to source video",
+    "camera_preservation": "Preserve the exact source camera. Do not pan, tilt, zoom, crop, reframe, rotate, or alter perspective."
+  },
+  "control_guidance": {
+    "control_type": "Edge",
+    "structure_priority": "Use the input-video edges as strict structural guidance. Preserve every vehicle silhouette, lane boundary, curb, crosswalk, and signal pole throughout the clip.",
+    "appearance_freedom": "Allow changes only to sky appearance, illumination, shadow character, and color temperature. Road surfaces remain dry and unchanged.",
+    "motion_priority": "All vehicles must follow their exact source-video trajectories. Edge guidance must not cause vehicles to change lanes, stop unexpectedly, or disappear.",
+    "temporal_consistency": "Maintain stable light placement and vehicle appearance across every frame. Lighting must not flicker or drift."
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic very dark nighttime traffic-camera footage under sparse artificial street lighting with deep surrounding shadows",
+  "context": "Very dark clear nighttime augmentation of an existing intersection traffic video using Cosmos 3 Transfer with Edge control",
+  "negative_prompt": "daytime, bright sunlight, clear blue sky, rain, snow, fog, wet pavement, bright ambient light, moonlit scene, well-lit scene, overexposed, high ambient fill, corrected vehicle trajectory, changed lane position, changed traffic direction, changed speed, collision, added vehicle, removed vehicle, duplicated vehicle, recolored vehicle, added pedestrian, added building, camera motion, camera shake, pan, tilt, zoom, geometry drift, flicker",
+  "audio_description": "Preserve the original video audio without alteration. Do not add wind, rain, sirens, horns, or new traffic audio."
+}

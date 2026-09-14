@@ -12,9 +12,9 @@ Summarization (VSS), NVIDIA Physical AI Data Factory, and NVIDIA TAO Toolkit.
 | Path | Contents |
 |---|---|
 | `docs/` | The course walkthrough site (Sphinx + `sphinx-nvlearning`) |
-| `notebook-1-1-vlm/` | Notebook 1.1 — Vision Language Models |
-| `notebook-1-2-sdg/` | Notebook 1.2 — Augmenting and Generating Datasets |
-| `notebook-1-3-vlm-pt/` | Notebook 1.3 — Fine-Tuning Vision Language Models |
+| `lab-1-vlm/` | Notebook 1.1 — Vision Language Models |
+| `lab-2-sdg/` | Notebook 1.2 — Augmenting and Generating Datasets |
+| `lab-3-vlm-pt/` | Notebook 1.3 — Fine-Tuning Vision Language Models |
 
 ## Course Structure
 

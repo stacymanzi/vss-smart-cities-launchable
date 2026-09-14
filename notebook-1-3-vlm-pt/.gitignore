@@ -1,5 +1,0 @@
-# executed copies embed base64 video (~1.6 MB each)
-*.executed.ipynb
-__pycache__/
-# secrets: .env.example is tracked, .env is not
-.env
