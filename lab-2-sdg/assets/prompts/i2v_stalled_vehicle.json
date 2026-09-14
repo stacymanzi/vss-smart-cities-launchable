@@ -1,0 +1,54 @@
+{
+  "subjects": [
+    {
+      "description": "A single passenger vehicle that comes to a stop in a through lane inside the intersection and does not move for the rest of the clip",
+      "appearance_details": "Standard sedan viewed from above, rooftop and hood visible, hazard lights blinking; preserve its color, shape and size from the provided image",
+      "relationship": "Primary subject - the stalled vehicle that obstructs one through lane",
+      "location": "In a through lane just past the stop line, within the intersection box visible in the provided image",
+      "relative_size": "Single vehicle, same overhead scale as the other vehicles in the scene",
+      "orientation": "Aligned with its lane's direction of travel",
+      "pose": "Upright, wheels straight, brake lights and hazard lights on",
+      "action": "Rolls forward slowly for the first second, then comes to a complete stop in the middle of the through lane and remains completely stationary for the rest of the clip while its hazard lights blink. It never moves, turns, or is pushed out of the lane.",
+      "state_changes": "Moving slowly, then stopped with hazard lights on, then stays stopped until the clip ends",
+      "number_of_subjects": "One vehicle"
+    },
+    {
+      "description": "Other vehicles approaching in the same direction and on the cross street",
+      "appearance_details": "Mixed passenger vehicles and SUVs viewed from above, in various colors",
+      "relationship": "Surrounding traffic reacting to the obstruction",
+      "location": "Approach lanes and cross-street lanes visible in the provided image",
+      "relative_size": "Similar overhead scale to the stalled vehicle",
+      "orientation": "Following their lanes' directions of travel",
+      "pose": "Upright, wheels contacting the road, moving",
+      "action": "Vehicles behind the stalled car slow down, queue briefly, then merge one at a time into the adjacent lane to pass it at reduced speed. Cross-street traffic flows normally during its green phase. No vehicle touches the stalled car.",
+      "state_changes": "Normal flow, then braking and queueing behind the obstruction, then a cautious lane change and pass, then normal flow downstream",
+      "number_of_subjects": "Multiple vehicles, 3-6"
+    }
+  ],
+  "background_setting": "A four-way signalized intersection viewed from a fixed elevated traffic camera. Lane markings, directional arrows, stop lines, pedestrian crossings, and traffic signal heads are clearly visible throughout. Traffic signals cycle normally. All scene geometry, camera angle, and background elements are preserved exactly. Use the provided image as the exact first frame.",
+  "lighting": {
+    "conditions": "Consistent daylight as established in the provided image",
+    "direction": "Overhead natural light, stable throughout the clip",
+    "shadows": "Short vehicle shadows consistent with the overhead sun angle visible in the seed image",
+    "illumination_effect": "Even, stable illumination across the intersection surface with good visibility of all markings and vehicles, including the blinking hazard lights",
+    "sky": "Clear or lightly overcast daytime sky, consistent with the seed image"
+  },
+  "aesthetics": {
+    "composition": "Fixed overhead intersection framing, matching the seed image",
+    "color_scheme": "Natural daylight tones - gray asphalt, painted lane markings, varied vehicle colors",
+    "mood_atmosphere": "Routine daytime traffic disrupted by a single stopped vehicle",
+    "patterns": "One stationary vehicle in a live lane, framed by traffic flowing around it"
+  },
+  "cinematography": {
+    "camera_motion": "Fixed - the camera does not pan, tilt, or zoom",
+    "framing": "Wide overhead establishing shot of the full intersection",
+    "camera_angle": "Elevated, near-top-down traffic-camera angle",
+    "depth_of_field": "Deep - all lanes and vehicles remain in focus",
+    "focus": "Uniformly sharp across the intersection",
+    "camera_preservation": "Use the provided image as the exact first frame and preserve its perspective and framing throughout"
+  },
+  "style_medium": "Live-action video",
+  "artistic_style": "Photorealistic daytime traffic-camera footage",
+  "context": "A vehicle stalls in a through lane inside the intersection and stays stopped while other traffic slows and passes around it",
+  "negative_prompt": "collision or contact between vehicles, the stalled vehicle resuming motion, the stalled vehicle disappearing, multiple stalled vehicles, tow trucks or emergency vehicles, teleporting vehicles, flickering, camera motion, pan, tilt, zoom, added pedestrians, added signage, nighttime, changed lane markings"
+}

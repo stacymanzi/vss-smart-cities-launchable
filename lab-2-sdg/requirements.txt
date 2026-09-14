@@ -1,0 +1,23 @@
+# Lab 2 (SDG) notebook kernel dependencies.
+# Baked into the DLI lab image at build time (Dockerfile: pip install -r lab-2-sdg/requirements.txt).
+# NEVER installed at learner time - the notebook contains no pip / ensurepip calls.
+#
+# The Cosmos framework runs in its OWN virtual environment (/opt/cosmos3-framework/.venv, built with
+# `uv sync` in the image) and is NOT listed here. The kernel only launches it as a subprocess.
+#
+# VERIFY ON DEVBOX: pin every line to the version reported by `python -m pip freeze` in the working
+# kernel venv before the image is built (torch/torchvision must be the CUDA 13.0 wheels matching the
+# r580 driver, e.g. from https://download.pytorch.org/whl/cu130).
+torch
+torchvision
+diffusers>=0.35.1        # provides diffusers.QwenImageEditPipeline
+transformers
+accelerate
+Pillow
+numpy
+openai                   # optional 2.2.1 / 3.1.1 hosted-LLM cells only
+ipykernel
+ipython
+ipywidgets               # tqdm progress bars in JupyterLab
+# System packages required in the image: ffmpeg (optional 3.1.1 video compression), uv (cosmos_framework
+# checkpoint resolver), nvidia-smi. python-dotenv was removed: the notebook reads no .env file.
