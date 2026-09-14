@@ -400,6 +400,7 @@ Expect roughly **20–40 minutes** and ~50 GB of HuggingFace cache on a cold run
 """)
 
 code(r"""
+# PTM = pre-trained model: the base checkpoint that fine-tuning starts from.
 BUILD_PTM = False    # the converted checkpoint is staged with the course data. True rebuilds it
                      # from HuggingFace (needs HF_TOKEN, network, ~50 GB and 20-40 min); only
                      # needed when running outside the course environment.

@@ -454,7 +454,8 @@ strategies and tune the important training hyperparameters.
 Optimize validation accuracy and summarize the best models.
 ```
 
-On the Woven Traffic Safety benchmark, one LoRA run took accuracy from 54% to
+In the [Post-train Cosmos 3 with TAO agent skills](https://github.com/NVIDIA-TAO/tao-tutorials/blob/main/tutorials/tao_agent_skills_examples/post_train_cosmos3/post_train_cosmos3_lora.md)
+tutorial, on the Woven Traffic Safety benchmark, one LoRA run took accuracy from 54% to
 87%, and a 43-trial AutoML sweep reached 93% — in about 19.5 hours and 170
 GPU-hours, which is why it is out of scope for a 30-minute slot. One finding
 from that sweep is more important than the headline number: the trial with the
