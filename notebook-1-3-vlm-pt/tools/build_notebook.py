@@ -86,7 +86,7 @@ This notebook explores the following topics:
 * Why **macro-F1** is the right metric for an imbalanced detection task, and why a
   **precision drop** can accompany a better model
 * Establishing a zero-shot baseline *before* training anything
-* **LoRA** post-training with NVIDIA TAO and Cosmos-RL: the spec keys that matter, how to
+* **LoRA** post-training with Cosmos-RL: the spec keys that matter, how to
   choose their values, and what breaks when you move them
 * Reading validation loss vs. real task accuracy — and why they disagree
 * Evaluating the tuned checkpoint on held-out clips and comparing before vs after
@@ -170,7 +170,7 @@ Run the section top to bottom and stop at the first `FAIL`.
 
 #### 2.1 Python Dependencies and Base Directory
 
-The notebook itself needs very little — the heavy lifting happens inside the TAO container.
+The notebook itself needs very little — the heavy lifting happens inside the Cosmos-RL container.
 
 All inputs and outputs live under a single **base directory**, set with `DLI_BASE`:
 
@@ -218,7 +218,7 @@ print(f"lab directory: {LAB_DIR}")
 
 # Everything this lab reads or writes lives under one directory. In the lab that is
 # the course data volume: the notebook container and the Docker daemon that runs
-# the TAO container both mount it at /dli/task/data, and a `docker run -v` source
+# the Cosmos-RL container both mount it at /dli/task/data, and a `docker run -v` source
 # is resolved by the daemon, so this is the only place both sides can see. The
 # base checkpoint and the dataset are staged there before the lab starts; runs
 # are written next to them. DLI_BASE overrides this on other machines, and the
@@ -228,8 +228,8 @@ BASE = Path(os.environ.get("DLI_BASE", _default_base)).resolve()
 BASE.mkdir(parents=True, exist_ok=True)
 print(f"base directory: {BASE}")
 
-# tomli_w writes the TAO spec; matplotlib draws the comparison. Both are installed
-# in the lab image. Everything heavy runs inside the TAO container.
+# tomli_w writes the Cosmos-RL spec; matplotlib draws the comparison. Both are installed
+# in the lab image. Everything heavy runs inside the Cosmos-RL container.
 import tomli_w, matplotlib
 print("dependencies ready")
 print(f"  python     {sys.version.split()[0]}")
@@ -260,7 +260,7 @@ where the container and checkpoint are already staged, neither is required.
 """)
 
 code(r"""
-# In the lab the TAO image and the base checkpoint are already staged, so no
+# In the lab the Cosmos-RL image and the base checkpoint are already staged, so no
 # credential is needed. On another machine, NGC_KEY (to pull the image) and
 # HF_TOKEN (to build the checkpoint) are read from the environment, then from a
 # .env file next to the notebook. Values are never printed.
@@ -296,7 +296,7 @@ for g in gpus:
 
 # Devices this notebook may use. Default: every GPU on the machine - the lab VM has
 # two H100s and training shards across both. DLI_GPU overrides ("0" or "0,1"). The
-# daemon that runs the TAO container sees the same devices with the same indices.
+# daemon that runs the Cosmos-RL container sees the same devices with the same indices.
 GPUS = H.as_gpu_list(os.environ.get("DLI_GPU", ",".join(str(g["index"]) for g in gpus)))
 print(f"\nUsing GPU(s): {GPUS}")
 
@@ -326,13 +326,13 @@ if not enough:
 """)
 
 md(r"""
-#### 2.4 Docker and the TAO Container
+#### 2.4 Docker and the Cosmos-RL Container
 
-Checkpoint preparation, training and evaluation all run inside the **TAO 7.2.0 Cosmos-RL**
+Checkpoint preparation, training and evaluation all run inside the **Cosmos-RL** container (image `tao-toolkit:7.2.0-cosmos-rl`)
 container (~41 GB on disk), which is normally pre-staged on the DLI instance. The cell pulls
 it if it is absent.
 
-A single image covers all three stages: it packages the TAO conversion entrypoint alongside an
+A single image covers all three stages: it packages the checkpoint-conversion entrypoint alongside an
 isolated Cosmos-Framework converter environment, so no second image is required.
 
 Qwen3-VL embeds video patches with a non-overlapping Conv3D. On some driver and cuDNN
@@ -364,13 +364,13 @@ H.check(f"disk >= 150 GB free on {WORK_FS}", free_disk >= 150,
         f"{free_disk:.0f} GB - training keeps 2 FSDP checkpoints (~66 GB each). "
         f"Set DLI_ROOT to a bigger mount if this fails.")
 
-# The TAO image is seeded into the course's Docker daemon when the environment
+# The Cosmos-RL image is seeded into the course's Docker daemon when the environment
 # starts, so nothing is pulled here. Pulling needs an NGC key and ~40 GB of disk,
 # which only makes sense on a development machine.
 if not H.image_present() and os.environ.get("NGC_KEY"):
     print(f"\n{H.IMAGE} not found - NGC_KEY is set, pulling (development machines only, ~40 GB) ...")
     H.pull_image()
-if not H.check(f"TAO image present ({H.IMAGE})", H.image_present()):
+if not H.check(f"Cosmos-RL image present ({H.IMAGE})", H.image_present()):
     raise RuntimeError(f"{H.IMAGE} is not in the Docker daemon this notebook talks to. "
                        "In the lab it is pre-seeded at launch (COURSE_EXTRA_IMAGES in the course compose); ask a TA.")
 
@@ -379,7 +379,7 @@ if not H.check(f"TAO image present ({H.IMAGE})", H.image_present()):
 md(r"""
 #### 2.5 Base Checkpoint
 
-TAO cannot load the native `cosmos3_omni` checkpoint format, so training uses a **Qwen3-VL
+Cosmos-RL cannot load the native `cosmos3_omni` checkpoint format, so training uses a **Qwen3-VL
 safetensors** conversion of Cosmos 3 Nano (~17 GB). On a DLI instance this is pre-staged and
 the cell below verifies it; otherwise the cell produces it.
 
@@ -387,7 +387,7 @@ Conversion downloads `nvidia/Cosmos3-Nano` and merges its language-model tensors
 `Qwen/Qwen3-VL-8B-Instruct` architecture. The base Nano release also ships a Qwen3-VL-shaped
 visual tower, so its trained vision encoder is carried over as well.
 
-Conversion runs in the **same image as training**, through the TAO-owned entrypoint
+Conversion runs in the **same image as training**, through the packaged entrypoint
 `cosmos_rl.model_preparation.vlm_safetensors`. That entrypoint dispatches to a
 Cosmos-Framework converter pinned in an isolated environment inside the image; importing
 `cosmos_framework` from the default interpreter therefore fails by design.
@@ -532,7 +532,8 @@ ANSWER_TYPE     = "freeform"                # answers are a LABEL= line, not A/B
 # ---- LoRA ----------------------------------------------------------------
 LORA_R          = 16
 LORA_ALPHA      = 32
-LORA_TARGETS    = ["q_proj", "v_proj"]
+LORA_TARGETS    = ["q_proj", "v_proj"]       # supported: q_proj k_proj v_proj o_proj gate_proj up_proj
+                                            #   down_proj attn.qkv attn.proj, or "all-linear"
 EPOCHS          = 3
 BATCH           = 4                         # must be a multiple of mini_batch (=1)
 LR              = 1e-4
@@ -715,7 +716,7 @@ the label set is dictated by what the pipeline must do, not by what is easy to a
 
 ##### The same problem, posed four ways
 
-TAO's Cosmos workflows accept two dataset families. This lab uses **`video_conversation`** —
+The Cosmos post-training workflow accepts two dataset families. This lab uses **`video_conversation`** —
 the llava shape you saw in 4.3, free-text answers that happen to be constrained. The other
 is **`task_aware_video_reasoning`**, which wraps records in a declared envelope
 (`format=tao-vl-reason-v1.0`) with an explicit task name, and gets the prompt template and
@@ -747,7 +748,7 @@ answer normalization from the runtime instead of from your prompt string.
 - **Labels:** the same three classes plus an explicit option list per record, and the answer
   becomes a letter.
 - **Pipeline:** the most robust to score — a letter cannot be misspelled or hedged, and
-  `mcq` participates in TAO's deterministic accuracy automatically.
+  `mcq` participates in the workflow's deterministic accuracy automatically.
 - **What you lose:** the letter carries no meaning. `B` is not "stalled"; it is just the
   second thing on a list, so the model can learn **position bias** instead of the concept.
 - **Watch out:** shuffle the option order per record. If `B` is always the right answer, you
@@ -759,7 +760,7 @@ answer normalization from the runtime instead of from your prompt string.
   only one where two annotators will disagree.
 - **Pipeline:** changes the most. There is no exact match, so you need BLEU/ROUGE, embedding
   similarity, or an LLM judge — all noisier and none directly comparable to the 0.961
-  macro-F1 you measured here. In TAO, description-style tasks are **excluded from aggregate
+  macro-F1 you measured here. In the Cosmos post-training workflow, description-style tasks are **excluded from aggregate
   accuracy** with a stated reason, precisely because there is no deterministic answer.
 - **What you gain:** it is the only posing that generalises past your label set. A caption
   can describe a debris spill you never anticipated; a 3-way classifier will call it `none`.
@@ -786,7 +787,7 @@ md(r"""
 ---
 ### 5. Baseline Evaluation
 
-Everything heavy runs inside the TAO container. `H.run_container(...)` assembles one
+Everything heavy runs inside the Cosmos-RL container. `H.run_container(...)` assembles one
 `docker run` command; the arguments are:
 
 | argument | meaning |
@@ -915,7 +916,7 @@ md(r"""
 
 #### 6.1 Training Configuration
 
-TAO drives Cosmos-RL from a TOML spec. The keys that matter here:
+Cosmos-RL is driven from a TOML spec. The keys that matter here:
 
 | key | value | why |
 |---|---|---|
@@ -1296,7 +1297,7 @@ code(r"""
 MERGED = Path(os.environ.get("DLI_MERGED", WORK / "merged" / "Cosmos3-Nano-VLM-lora"))
 MERGED.parent.mkdir(parents=True, exist_ok=True)
 
-# Every TAO container is given HOME=/results and its torch caches under it. The
+# Every Cosmos-RL container is given HOME=/results and its torch caches under it. The
 # merge container has no results mount of its own, so provide a writable scratch
 # directory there or torch fails to create /results/.inductor.
 SCRATCH = WORK / "scratch"; SCRATCH.mkdir(parents=True, exist_ok=True)
@@ -1313,7 +1314,7 @@ print(f"  adapter  {best.relative_to(WORK) if str(best).startswith(str(WORK)) el
 print(f"  output   {MERGED}")
 print()
 
-# The merge runs inside the TAO container: it has torch and safetensors, and this
+# The merge runs inside the Cosmos-RL container: it has torch and safetensors, and this
 # keeps the notebook kernel free of heavyweight dependencies.
 rc, merge_time = H.run_container(
     "dli_merge_lora", GPUS,
@@ -1426,7 +1427,7 @@ In this notebook you covered:
   span train and validation
 - **macro-F1** as the appropriate metric for an imbalanced task
 - **Establishing a baseline before training**, without which improvement cannot be claimed
-- **LoRA post-training** with TAO and Cosmos-RL: adapter rank, the required specification
+- **LoRA post-training** with Cosmos-RL: adapter rank, the required specification
   keys, and why the artifact is 15 MB rather than 17 GB
 - **Validation loss compared with task accuracy**: the lowest-loss epoch is not necessarily
   the most accurate checkpoint
