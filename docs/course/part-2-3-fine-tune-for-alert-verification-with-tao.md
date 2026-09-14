@@ -1,4 +1,17 @@
-# Part 2.3: Fine-Tune for Alert Verification With TAO
+# Part 2.3 (Optional): Fine-Tune for Alert Verification With TAO
+
+:::{note}
+**This walkthrough is optional.** It repeats the workflow of Notebook 1.3 —
+zero-shot evaluation, LoRA fine-tuning, evaluation and merge — but driven by
+natural-language prompts to a coding agent rather than notebook cells. Part 2.4
+uses a course-provided fine-tuned checkpoint, so you can skip this section and
+return to it later.
+
+The same agent-driven workflow is demonstrated in the video tutorial
+[Post-train Cosmos 3 with TAO agent skills](https://youtu.be/9AQkVbx3fKA),
+which also covers **AutoML**: letting the agent search the hyperparameter space
+for you instead of tuning learning rate, rank and batch size by hand.
+:::
 
 Part 2.1 left you with a working pipeline whose verifier — the stock Cosmos
 Reason 3 Nano — confirms most real events but not all of them. Part 2.2 gave you
@@ -14,6 +27,7 @@ deploys.
 ```{nvlearning-meta}
 - **Level:** All levels — no prior VLM or Cosmos experience needed
 - **Duration:** About 30 minutes, dominated by one training wait
+- **Video tutorial:** <https://youtu.be/9AQkVbx3fKA>
 - **Agent:** Codex with the TAO Skill Bank
 - **Working directory:** `/dli/task/data/lab3/part2`
 ```
@@ -75,19 +89,20 @@ agent explicitly.
 
 ### Expected Times
 
-Container run times, and the whole prompt including the agent's planning,
-launch and reporting (measured with the prompts on this page).
+Measured on the course instance (2 × H100) with the prompts on this page. The
+"whole step" column includes the agent's planning, the container run and the
+report.
 
-| Step | Container, 2 × H100 | Container, 1 × RTX PRO 6000 | Whole prompt |
-|---|---|---|---|
-| 4 Zero-shot evaluation | ~1 min | ~0.7 min | ~3.5 min |
-| 5 Plan, review and fine-tune | ~4.5 min | ~7 min | container + ~3 min |
-| 6 Fine-tuned evaluation | ~1.5 min | ~1.5 min | ~3 min |
-| 7 Merge and verify | ~2 min | ~1.5 min | ~4 min |
+| Step | Container | Whole step |
+|---|---|---|
+| 4 Zero-shot evaluation | ~1 min | ~4 min |
+| 5 Plan, review and fine-tune | ~4.5 min | ~8 min |
+| 6 Fine-tuned evaluation | ~1.5 min | ~4 min |
+| 7 Merge and verify | ~2 min | ~4 min |
 
-About 20 minutes end to end on this machine class. The prompts are written to
-keep the agent's share of that small: the earlier, sparser prompts measured
-roughly twice as long, almost all of it agent time (see the note under Step 4).
+About 20 minutes end to end. The prompts are written to keep the agent's share
+of that small: sparser prompts measured roughly twice as long, almost all of it
+agent time (see the note under Step 4).
 
 ### Three Things Worth Knowing Before You Prompt
 
@@ -440,7 +455,8 @@ strategies and tune the important training hyperparameters.
 Optimize validation accuracy and summarize the best models.
 ```
 
-On the Woven Traffic Safety benchmark, one LoRA run took accuracy from 54% to
+In the [Post-train Cosmos 3 with TAO agent skills](https://github.com/NVIDIA-TAO/tao-tutorials/blob/main/tutorials/tao_agent_skills_examples/post_train_cosmos3/post_train_cosmos3_lora.md)
+tutorial, on the Woven Traffic Safety benchmark, one LoRA run took accuracy from 54% to
 87%, and a 43-trial AutoML sweep reached 93% — in about 19.5 hours and 170
 GPU-hours, which is why it is out of scope for a 30-minute slot. One finding
 from that sweep is more important than the headline number: the trial with the
@@ -471,8 +487,9 @@ platform skills; the prompts in this walkthrough work as written on any of them.
 - Per-condition table: clean perfect, fog, rain and night slightly lower.
 - Merge summary: 17 GB, 4 shards, "scores identically to the adapter".
 
-**Time budget (measured).** Free GPUs 2, install 1, zero-shot 4, plan+review+train 8,
-evaluate 3, merge 4, clean up 1 = 23 min, leaving slack in a 30-minute slot.
+**Time budget (measured on the course instance).** Free GPUs 2, install 1,
+zero-shot 4, plan+review+train 8, evaluate 4, merge 4, clean up 1 = 24 min,
+leaving slack in a 30-minute slot.
 :::
 
 ## What's Next

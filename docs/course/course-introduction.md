@@ -149,7 +149,7 @@ evaluating a system, not trusting a black box.
 | [Part 1](part-1-cosmos-basics) | Complete notebooks 1.1, 1.2, and 1.3 |
 | [Part 2.1](part-2-1-deploy-zero-shot-vss) | Deploy zero-shot VSS for alert verification |
 | [Part 2.2](part-2-2-expand-your-dataset-with-paidf) | Expand the dataset with PAIDF |
-| [Part 2.3](part-2-3-fine-tune-for-alert-verification-with-tao) | Fine-tune for alert verification with TAO |
+| [Part 2.3](part-2-3-fine-tune-for-alert-verification-with-tao) | *(Optional)* Fine-tune for alert verification with TAO — [video tutorial](https://youtu.be/9AQkVbx3fKA) |
 | [Part 2.4](part-2-4-deploy-fine-tuned-vss) | Deploy fine-tuned VSS and compare |
 
 ## The Workflow You'll Follow
