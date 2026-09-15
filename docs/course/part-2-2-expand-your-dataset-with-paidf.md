@@ -131,7 +131,7 @@ images, caches, and outputs.
 The completed EVG workflow turns the traffic-camera seed frame into this
 stalled-vehicle event clip:
 
-![Sample output VDA Clip](assets/evg_out.mp4)
+![Sample output EVG Clip](assets/evg_out.mp4)
 
 ---
 ## Track B — Video Data Augmentation
