@@ -46,7 +46,7 @@ read both.
 
 ## Track A — Event Video Generation
 ### The EVG Seed Frame
-<img src="./assets/traffic_cam.png" alt="Traffic-camera seed image used for EVG" width="632">
+<img src="./assets/traffic_cam.png" alt="Traffic-camera seed image used for EVG" width="432">
 
 EVG begins with a **seed image**: a still image that establishes the scene,
 camera viewpoint, objects, and visual context from which the model generates
