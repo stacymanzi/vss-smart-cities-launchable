@@ -49,7 +49,7 @@ codex login --device-auth
 
 ![The Codex device login: URL and one-time code](images/2-1-codex-login.png)
 
-Now set the environment for the deployment. Replace `<your-lab-host>` with the hostname from your browser's address bar: keep only the hostname, no `https://`, no `/lab/lab`, nothing after it. The NGC key is typed silently and lives only in this shell. Everything the agent needs is exported before it starts, because Codex inherits its environment at launch.
+Now set the environment for the deployment. This step needs the **NGC Personal API Key** from the [Prerequisites](prerequisites) page; generate it now if you have not already. Replace `<your-lab-host>` with the hostname from your browser's address bar: keep only the hostname, no `https://`, no `/lab/lab`, nothing after it. The NGC key is typed silently and lives only in this shell. Everything the agent needs is exported before it starts, because Codex inherits its environment at launch.
 
 ```bash
 export AICITY_PUBLIC_URL="http://<your-lab-host>"

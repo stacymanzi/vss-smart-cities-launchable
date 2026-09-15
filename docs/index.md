@@ -74,6 +74,7 @@ Part 1 runs from the notebook folders in this repository:
 :hidden:
 
 Course Introduction <course/course-introduction>
+Prerequisites <course/prerequisites>
 Part 1: Cosmos Basics <course/part-1-cosmos-basics>
 Part 2.1: Deploy Zero-Shot VSS for Alert Verification <course/part-2-1-deploy-zero-shot-vss>
 Part 2.2: Expanding Your Dataset With PAIDF <course/part-2-2-expand-your-dataset-with-paidf>
