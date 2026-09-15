@@ -38,17 +38,16 @@ address and a few minutes.
 ### 2. Open the API Keys page
 
 1. Click your **username** in the top right corner.
-2. Select **Setup** from the dropdown.
-3. Under **Keys/Secrets**, open **API Keys**.
+2. Select **Account Settings** from the dropdown.
+3. Scroll down to **Keys & Secrets** and click **Generate API Key**.
 
 ### 3. Generate the key
 
-1. Click **Generate API Key**.
-2. Click **Generate Personal Key**.
-3. Give it a descriptive **name** — something like `Singapore AI Day DLI` — so
+1. Click **Generate Personal Key**.
+2. Give it a descriptive **name** — something like `Singapore AI Day DLI` — so
    you can recognise and revoke it later.
-4. Under **Key Permissions**, select **NGC Catalog**.
-5. Click **Generate Personal Key** to finish.
+3. Under **Key Permissions**, select **NGC Catalog**.
+4. Click **Generate Personal Key** to finish.
 
 :::{warning}
 **Copy the key immediately.** NGC shows it once and will not show it again. Put
