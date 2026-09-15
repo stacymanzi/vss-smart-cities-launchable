@@ -8,7 +8,7 @@ you the walkthrough.
 ```{nvlearning-meta}
 - **Level:** All levels — no prior VLM or Cosmos experience needed
 - **When:** Before Part 2.1
-- **Time:** About 5 minutes
+- **Time:** About 15 minutes
 ```
 
 ## Learning Objectives
@@ -16,6 +16,7 @@ you the walkthrough.
 ```{nvlearning-objectives}
 - **Create** an NVIDIA NGC account and generate a Personal API Key scoped to the NGC Catalog.
 - **Store** that key safely, and recognise where the course asks for it.
+- **Activate** your ChatGPT Pro plan and sign in to the Codex CLI with a device code.
 ```
 
 ## Create an NGC Personal API Key
@@ -95,10 +96,60 @@ credential, the answer is that the key is already set. Do not commit a key to
 version control.
 :::
 
+## Set Up the Codex Coding Agent
+
+Every walkthrough in Part 2 is driven by **Codex**, OpenAI's command-line coding
+agent. You sign in with your own ChatGPT account, so both the plan and the login
+need to be sorted before the course.
+
+### Activate Your One-Month Free Pro Plan
+
+1. Visit `www.chatgpt.com/p/[PROMOCODE]`, replacing `[PROMOCODE]` with the code
+   printed on your card. Log in if prompted.
+2. A valid credit card is required to complete the subscription.
+3. **Optional but recommended:** cancel the subscription straight away to avoid
+   future charges. Go to **Settings → Billing**, then cancel. The month you have
+   already activated still runs.
+
+### Sign In to Codex
+
+The course runs on remote machines, so the browser-redirect login does not work.
+You use the **device code** flow instead.
+
+1. Run `codex` in your terminal.
+2. Choose option **2, "Sign in with Device Code"**. This is the one that works on
+   a remote machine.
+3. Follow the prompts to log in with your personal email, and **copy the device
+   code** it prints. You may hit a security setting at
+   [auth.openai.com/codex/device](https://auth.openai.com/codex/device) — the
+   next step clears that.
+4. Enable device code authorization. In a separate browser tab, go to
+   [auth.openai.com/log-in](https://auth.openai.com/log-in) and log in. Then open
+   **Settings → Security** and toggle **Enable device code authorization for
+   Codex**.
+5. Return to [auth.openai.com/codex/device](https://auth.openai.com/codex/device).
+   It should now offer **Sign in to Codex with ChatGPT**.
+6. Paste the device code from step 3.
+7. The tab closes itself. Go back to the terminal — you're signed in.
+
+:::{warning}
+**Never share a device code.** They are a common phishing target, and the Codex
+prompt says so for good reason. Only ever paste one into the OpenAI page you
+opened yourself.
+:::
+
+:::{note}
+Part 2.1 runs `codex login --device-auth`, which jumps straight to the
+device-code option rather than showing the menu. Same flow, one less choice.
+Signing in now means Part 2.1 starts with a working agent.
+:::
+
 ```{nvlearning-checkpoint} Before You Start the Course
 - You have an NGC account and can sign in at [ngc.nvidia.com](https://ngc.nvidia.com).
 - You generated a **Personal API Key** with **NGC Catalog** permissions.
 - The key is saved somewhere you can copy it from when Part 2.1 asks.
+- Your ChatGPT Pro plan is activated.
+- `codex` signs you in with a device code and reaches the "Signed in with your ChatGPT account" prompt.
 ```
 
 ## What's Next
