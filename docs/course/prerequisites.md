@@ -31,23 +31,38 @@ walkthrough that needs it does not pause while you go and make one.
 
 ### 1. Sign in to NGC
 
-Go to [ngc.nvidia.com](https://ngc.nvidia.com) and select **Sign In**, or
-**Sign Up** if you don't have an account yet. Registration takes an email
-address and a few minutes.
+Go to [ngc.nvidia.com](https://ngc.nvidia.com) and enter your email address to
+log in, or to create an NVIDIA profile if you don't have one yet. Registration
+takes a few minutes.
+
+![The NGC log-in page at ngc.nvidia.com/signin, with the Email Address field and Continue button](assets/ngc-login.png)
 
 ### 2. Open the API Keys page
 
-1. Click your **username** in the top right corner.
-2. Select **Account Settings** from the dropdown.
-3. Scroll down to **Keys & Secrets** and click **Generate API Key**.
+Click your **username** in the top right corner and select **Account Settings**
+from the dropdown.
+
+![The NGC user dropdown open, with Account Settings highlighted above Setup](assets/ngc-account-settings.png)
+
+On that page, scroll down to **Keys & Secrets** and click **Generate API Key**
+in the **API Keys** card.
+
+![The Keys & Secrets section of the Account page, with the Generate API Key button in the API Keys card highlighted](assets/ngc-api-key-section.png)
 
 ### 3. Generate the key
 
-1. Click **Generate Personal Key**.
-2. Give it a descriptive **name** — something like `Singapore AI Day DLI` — so
-   you can recognise and revoke it later.
-3. Under **Key Permissions**, select **NGC Catalog**.
-4. Click **Generate Personal Key** to finish.
+Click **+ Generate Personal Key** at the top right of the API Keys page.
+
+![The API Keys page, with the Generate Personal Key button highlighted at the top right](assets/ngc-generate-key-button.png)
+
+Fill in the dialog:
+
+1. **Key Name** — something you'll recognise later, such as `dli-ngc-key`.
+2. **Expiration** — the default of 12 months is fine; the course needs it for a day.
+3. **Key Permissions → Services Included** — select **NGC Catalog**.
+4. Click **Generate Personal Key**.
+
+![The Generate Personal Key dialog: Key Name dli-ngc-key, Expiration 12 months, and NGC Catalog selected under Services Included](assets/ngc-set-key-scope.png)
 
 :::{warning}
 **Copy the key immediately.** NGC shows it once and will not show it again. Put
