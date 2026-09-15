@@ -131,10 +131,7 @@ images, caches, and outputs.
 The completed EVG workflow turns the traffic-camera seed frame into this
 stalled-vehicle event clip:
 
-<video controls playsinline width="832">
-  <source src="./assets/evg_out.mp4" type="video/mp4">
-  Your browser cannot play this video inline. <a href="./assets/evg_out.mp4">Open the EVG output directly.</a>
-</video>
+![Sample output VDA Clip](assets/evg_out.mp4)
 
 ---
 ## Track B — Video Data Augmentation
@@ -252,10 +249,7 @@ published outputs.
 The completed VDA workflow transforms the source traffic footage into this
 clear nighttime scene:
 
-<video controls playsinline width="832">
-  <source src="./assets/aug_out.mp4" type="video/mp4">
-  Your browser cannot play this video inline. <a href="./assets/aug_out.mp4">Open the augmented output directly.</a>
-</video>
+![Sample output VDA Clip](assets/aug_out.mp4)
 
 ---
 ## Scaling Up Generations
