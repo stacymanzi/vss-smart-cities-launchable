@@ -106,10 +106,19 @@ need to be sorted before the course.
 
 1. Visit `www.chatgpt.com/p/[PROMOCODE]`, replacing `[PROMOCODE]` with the code
    printed on your card. Log in if prompted.
-2. A valid credit card is required to complete the subscription.
+
+   ![The ChatGPT Pro offer card: $100 struck through and reduced to $0 for the first month, with an Upgrade to Pro button](assets/codex-promo-upgrade.png)
+
+2. A valid credit card is required to complete the subscription. The promotion
+   shows as 100% off for a month, so the amount due today is $0.00.
+
+   ![The Configure your plan checkout page: Pro plan with a $100 promotion applied and $0.00 due today, beside the card-number fields](assets/codex-checkout.png)
+
 3. **Optional but recommended:** cancel the subscription straight away to avoid
    future charges. Go to **Settings → Billing**, then cancel. The month you have
    already activated still runs.
+
+   ![The ChatGPT Billing settings page, where the subscription can be cancelled](assets/codex-cancel-billing.png)
 
 ### Sign In to Codex
 
@@ -127,9 +136,13 @@ You use the **device code** flow instead.
    [auth.openai.com/log-in](https://auth.openai.com/log-in) and log in. Then open
    **Settings → Security** and toggle **Enable device code authorization for
    Codex**.
+
+   ![ChatGPT Advanced security settings with Security selected in the sidebar and the Enable device code authorization for Codex toggle switched on](assets/codex-security-toggle.png)
 5. Return to [auth.openai.com/codex/device](https://auth.openai.com/codex/device).
    It should now offer **Sign in to Codex with ChatGPT**.
 6. Paste the device code from step 3.
+
+   ![The Use your device code to grant access to Codex CLI page, showing the nine-character entry field and a security warning that device codes are a common phishing target](assets/codex-device-code-entry.png)
 7. The tab closes itself. Go back to the terminal — you're signed in.
 
 :::{warning}
