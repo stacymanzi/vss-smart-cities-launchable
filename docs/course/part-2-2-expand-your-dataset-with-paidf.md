@@ -66,8 +66,8 @@ can set up the workflow with hosted endpoints if needed.
 
 ### Generate a Traffic-Anomaly Video
 ```
-Generate one clip of a stalled vehicle on an urban road using
-`/dli/task/Part-2/traffic_cam.png` as the seed image, seed 43.
+Generate one clip of a vehicle stalling in the middle of a busy intersection
+using `/dli/task/Part-2/traffic_cam.png` as the seed image, seed 43
 ```
 
 The skill maps the requested seed image, incident type, environment, and seed
@@ -92,9 +92,18 @@ the verification pass/fail table.
 
 Read back the exact prompt Cosmos I2V received and the
 `attribute_verification`/evaluation pass-fail table — a VLM-answered check
-on whether the requested anomaly, environment, and visual clarity actually
-show up. A failed check means regenerate with a different seed, not ship
-as-is.
+on whether the requested anomaly actually shows up.
+
+EVG also preserves the outputs it catches as failed instead of presenting
+them as successful generations. You can inspect any available video, unchanged
+metadata, and `failure_summary.json` under:
+
+```
+/dli/task/Part-2/paidf_rejects/evg/<run>/<name>/<attempt>/
+```
+
+The single-video flow may use its one configured retry after a failed attempt;
+each rejected attempt remains available at this location for comparison.
 
 ### Release the EVG Resources
 
@@ -117,6 +126,16 @@ Spin down both EVG endpoint containers to release their GPUs. Preserve all
 images, caches, and outputs.
 ```
 
+### See What You Generated
+
+The completed EVG workflow turns the traffic-camera seed frame into this
+stalled-vehicle event clip:
+
+<video controls playsinline width="832">
+  <source src="./evg_out.mp4" type="video/mp4">
+  Your browser cannot play this video inline. <a href="./evg_out.mp4">Open the EVG output directly.</a>
+</video>
+
 ---
 ## Track B — Video Data Augmentation
 ### The VDA Input Video and Augmentation Settings
@@ -126,6 +145,9 @@ VDA begins with an **input video** whose scene layout, subjects, and motion
 provide the structure for a new version of the clip. The pipeline uses that
 source while changing selected visual conditions—such as weather or time of
 day so the output remains recognizable as the same scene and activity.
+
+VDA processes video in 93-frame chunks. This walkthrough uses a 93-frame
+input—just one chunk—to keep generation time short.
 
 You can view a sample generation config at
 `skills/physical-ai-video-data-augmentation-local/assets/cookbooks/city_traffic/workflow_config.yaml`.
@@ -195,6 +217,18 @@ the selected conditions and validation results.
 The prompt and metadata explain what the model was asked to generate and
 whether the result passed its hallucination and attribute checks. 
 
+VDA likewise keeps an augmentation that fails either check out of the successful
+output directory while preserving it for inspection. Any available generated
+video, unchanged metadata, and `failure_summary.json` are stored under:
+
+```
+/dli/task/Part-2/paidf_rejects/vda/<run>/<video>_aug<index>/<attempt>/
+```
+
+This lets you see what the pipeline caught and which attribute or structure
+check caused the rejection. VDA does not automatically regenerate the failed
+clip because its local cookbooks use zero pipeline retries.
+
 As an optional convenience, you can ask the agent to create a browser-ready viewer to see the various generations:
 
 ```
@@ -212,6 +246,16 @@ Spin down the VDA containers to release their GPUs, including the persistent
 `nemotron-nim` endpoint. Preserve all images, caches, run directories, and
 published outputs.
 ```
+
+### See What You Generated
+
+The completed VDA workflow transforms the source traffic footage into this
+clear nighttime scene:
+
+<video controls playsinline width="832">
+  <source src="./aug_out.mp4" type="video/mp4">
+  Your browser cannot play this video inline. <a href="./aug_out.mp4">Open the augmented output directly.</a>
+</video>
 
 ---
 ## Scaling Up Generations
