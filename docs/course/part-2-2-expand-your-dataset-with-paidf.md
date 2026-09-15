@@ -264,3 +264,18 @@ is part of the [Physical AI Data Factory repository](https://github.com/NVIDIA/p
 and the [Kubernetes/Airflow EVG workflow](https://github.com/NVIDIA/paidf-orchestration/tree/main/skills/physical-ai-event-video-generation)
 is part of [PAIDF Orchestration](https://github.com/NVIDIA/paidf-orchestration).
 The [OSMO platform](https://github.com/NVIDIA/OSMO) is also open source.
+
+```{nvlearning-checkpoint} Checkpoint 2
+- Both PAIDF skills read, and the seed frame and cookbook sampling config reviewed before generating anything.
+- Track A: one traffic-anomaly clip generated from the seed frame with EVG, and its prompt and attribute verification table reviewed.
+- Track B: one clip re-shot in new conditions with VDA and auto-labeled, with the labels cross-checked against the cookbook's documented failure modes.
+- Endpoints released after each track, so both GPUs are free for Part 2.3.
+```
+
+## What's Next
+
+You now have the two levers that produce targeted training data: generate an
+event that never happened, or re-shoot footage you already have under
+conditions you lack. Next you measure what the base model actually gets wrong
+and close that gap in
+[Part 2.3: Fine-Tune for Alert Verification With TAO](part-2-3-fine-tune-for-alert-verification-with-tao).
