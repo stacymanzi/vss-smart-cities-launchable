@@ -8,3 +8,6 @@ wheels/
 
 # Added
 .venv/
+
+# Working material that must not ship with the docs
+docs/course/assets/*.pdf

@@ -146,6 +146,7 @@ evaluating a system, not trusting a black box.
 
 | Part | What you do |
 |---|---|
+| [Prerequisites](prerequisites) | Generate an NGC Personal API Key before the course |
 | [Part 1](part-1-cosmos-basics) | Complete notebooks 1.1, 1.2, and 1.3 |
 | [Part 2.1](part-2-1-deploy-zero-shot-vss) | Deploy zero-shot VSS for alert verification |
 | [Part 2.2](part-2-2-expand-your-dataset-with-paidf) | Expand the dataset with PAIDF |
@@ -188,7 +189,7 @@ question with its own frame sampling. Always say which one you mean.
 - Comfort reading Python and running commands in a terminal. You use Docker, but every command you need is given to you.
 - No prior VLM, Cosmos, or fine-tuning experience needed. Part 1 builds it from the ground up.
 - The course environment provides two H100-class GPUs, a remote Docker daemon, and all container images and model weights pre-staged.
-- No NGC key or Hugging Face token is needed for Part 2.3. Part 2.1 uses an NGC personal key for the tuned profile build.
+- An **NGC Personal API Key**, generated before the course. Part 2.1 needs it for the tuned profile build; see [Prerequisites](prerequisites).
 ```
 
 :::{note}
@@ -206,5 +207,7 @@ system-level evaluations produce different numbers.
 
 ## What's Next
 
-Start with [Part 1: Cosmos Basics](part-1-cosmos-basics) to build
-the foundation, then move into the agent-driven walkthroughs in Part 2.
+Check the [Prerequisites](prerequisites) first — you need an NGC Personal API
+Key before Part 2.1, and it takes about five minutes to generate. Then start
+with [Part 1: Cosmos Basics](part-1-cosmos-basics) to build the foundation, and
+move into the agent-driven walkthroughs in Part 2.
