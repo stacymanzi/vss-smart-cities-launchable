@@ -25,6 +25,7 @@ In this walkthrough you deploy that pipeline with a coding agent and the VSS age
 
 Nineteen services on two GPUs. Video enters through VIOS, the video store, which turns an uploaded MP4 into a stream and later cuts the evidence clips. RT-CV, a prebuilt vision microservice from VSS running on GPU 0, performs GPU-optimized detection and tracking: it runs the TrafficCamNet RT-DETR detector and tracks every vehicle. Behavior Analytics applies two rules to those tracks, stopped vehicle and collision, and raises a candidate alert for each. Alert Bridge cuts a clip per candidate and asks Cosmos Reason 3 Nano, served by RT-VLM on GPU 1, one fixed question: which of the following does this clip show, a collision, a stalled vehicle, or neither, answered as exactly one label. The verdict and its reasoning land in Elasticsearch, and the UI at `/alerts/` reads them from there. Kafka carries events between stages, Postgres holds the video catalogue, and all of that state lives in named volumes that survive every shutdown. HAProxy on port 80 is the only way in; DLI publishes nothing else.
 
+![`watch docker ps` during Step 4: elasticsearch, kafka, logstash and redis, the VIOS ingest and storage services, RT-CV, RT-VLM, Behavior Analytics, Alert Bridge and the HAProxy ingress, each reporting Up and healthy](images/2-1-docker-ps-healthy.png)
 
 ## Step 1: Check the Box, Log In, Set the Environment, Start the Agent
 
