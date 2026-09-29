@@ -29,3 +29,5 @@ Summarization (VSS), NVIDIA Physical AI Data Factory, and NVIDIA TAO Toolkit.
 | Part 2.2 | Augment the dataset with PAIDF (EVG and VDA) |
 | Part 2.3 | Fine-tune for alert verification with TAO |
 | Part 2.4 | Deploy fine-tuned VSS and compare results |
+
+All the parts will have their individual documentation that helps you got through them. 
