@@ -8,7 +8,7 @@ An end-to-end course on building a vision AI agent for smart-city traffic anomal
 
 | Path | Contents |
 |---|---|
-| `docs/` | The course walkthrough site (Sphinx + `sphinx-nvlearning`) |
+| `docs/` | The course walkthrough site for Part2 and Introduction |
 | `lab-1-vlm/` | Notebook 1.1 — Vision Language Models |
 | `lab-2-sdg/` | Notebook 1.2 — Augmenting and Generating Datasets |
 | `lab-3-vlm-pt/` | Notebook 1.3 — Fine-Tuning Vision Language Models |
