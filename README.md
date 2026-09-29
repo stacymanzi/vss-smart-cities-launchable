@@ -1,11 +1,8 @@
 # VSS Smart Cities Launchable
 
-**Build High-Accuracy Vision AI Agents for Anomaly Detection Using Synthetic
-Data and Fine-Tuning**
+**Build High-Accuracy Vision AI Agents for Anomaly Detection Using Synthetic Data and Fine-Tuning**
 
-An end-to-end course on building a vision AI agent for smart-city traffic
-anomaly detection with NVIDIA Cosmos, the NVIDIA Blueprint for Video Search and
-Summarization (VSS), NVIDIA Physical AI Data Factory, and NVIDIA TAO Toolkit.
+An end-to-end course on building a vision AI agent for smart-city traffic anomaly detection with NVIDIA Cosmos, the NVIDIA Blueprint for Video Search and Summarization (VSS), NVIDIA Physical AI Data Factory, and NVIDIA TAO Toolkit.
 
 ## Repository Layout
 
@@ -20,8 +17,7 @@ Summarization (VSS), NVIDIA Physical AI Data Factory, and NVIDIA TAO Toolkit.
 
 **Part 1 — Cosmos Basics** runs from the three notebook folders above.
 
-**Part 2 — Application** is four agent-driven walkthroughs, documented in
-`docs/course/`:
+**Part 2 — Application** is four agent-driven walkthroughs, documented in `docs/course/`:
 
 | Page | Topic |
 |---|---|
